@@ -1,33 +1,42 @@
 :root {
-    --main-color: #eeeeee
+    --main-color: #eeeeee;
+}
+
+@font-face {
+    font-family: "OpenSans";
+    src: url("../public/fonts/OpenSans-VariableFont.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "OpenSans-Bold";
+    src: url("../public/fonts/OpenSans-VariableFont.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+.font-bold {
+    font-family: "OpenSans-Bold";
 }
 
 html,
 body {
     padding: 0;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: "OpenSans";
     font-size: 14px;
     color: var(--main-color);
-}
-
-body {
-    background-image: linear-gradient(-45deg, rgba(0, 0, 0, 0.6), rgb(8, 57, 53));
-    /*filter: blur(20px);*/
+    background: linear-gradient(180deg, #041727 0%, #062B3F 100%) !important;
 }
 
 * {
     box-sizing: border-box;
 }
 
-a {
-    color: #0070f3;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
+a, a:hover {
+    color: #6ACAD1;
+    text-decoration: #6ACAD1 underline;
 }
 
 img {
@@ -37,4 +46,60 @@ img {
 
 .hFull {
     height: 100vh;
+}
+
+.flex1 {
+    flex: 1;
+}
+
+
+@media screen and (max-width: 1710px) {
+    .scale {
+        transform: scale(0.9);
+    }
+
+    html {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 1520px) {
+    .scale {
+        transform: scale(0.8);
+    }
+
+    html {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 1330px) {
+    .scale {
+        transform: scale(0.7);
+    }
+
+    html {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 1140px) {
+
+    .scale {
+        transform: scale(0.6);
+    }
+
+    html {
+        font-size: 9px;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .scale {
+        transform: scale(0.5);
+    }
+
+    html {
+        font-size: 8px;
+    }
 }
