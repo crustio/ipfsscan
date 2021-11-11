@@ -40,12 +40,7 @@ On success, the API returns with 200 and the following body:
             "Country": "<string>",
             "Longitude": "<float>",
             "Latitude": "<float>",
-            ...
         },
-        {
-            
-        },
-        ...
     ]
 }
 ```
