@@ -1,0 +1,38 @@
+name: Crust Files Deploy
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: install and export
+        run: |
+          yarn install
+          yarn export
+
+      - name: Pin to IPFS
+        id: upload
+        uses: crustio/ipfs-upload-action@v2.0.2
+        with:
+          path: './out'
+          seeds: ${{ secrets.CRUST_SEEDS }}
+
+      - name: Place storage order on Crust
+        uses: crustio/ipfs-crust-action@v2.0.3
+        continue-on-error: true
+        timeout-minutes: 2
+        with:
+          cid: ${{ steps.upload.outputs.hash }}
+          seeds: ${{ secrets.CRUST_SEEDS }}
+
+      - name: Update DNS with new IPFS hash
+        env:
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+          RECORD_DOMAIN: 'ipfs-scan.crustapps.net'
+          RECORD_NAME: '_dnslink'
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        uses: textileio/cloudflare-update-dnslink@0fe7b7a1ffc865db3a4da9773f0f987447ad5848
+        with:
+          cid: ${{ steps.upload.outputs.hash }}

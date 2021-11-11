@@ -1,1 +1,2 @@
-# ipfsscan
+# ipfs-scan
+
