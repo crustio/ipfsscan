@@ -9,5 +9,20 @@ export interface BasePropsWithChildren extends BaseProps {
 }
 
 export interface GatewayItem {
+  name: string,
+  city?: string,
+  country?: string,
+  baseUrl: string,
+  id: number,
+  latitude: string,
+  longitude: string
+}
 
+export interface Peer {
+  id: string
+}
+
+export interface GatewayInfo extends GatewayItem {
+  peers: Peer[],
+  loading: boolean
 }
