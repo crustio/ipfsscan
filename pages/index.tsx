@@ -79,6 +79,9 @@ export default React.memo(styled(Home)`
       svg {
         width: 100%;
         height: auto;
+        path {
+          fill-opacity: 0.5;
+        }
       }
     }
 

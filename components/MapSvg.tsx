@@ -6017,6 +6017,7 @@ export const MapSvg = React.memo(styled(MapSvg_)`
   height: auto;
   path {
     fill: #60757B;
+    fill-opacity: 1;
   }
 `)
 export default MapSvg
