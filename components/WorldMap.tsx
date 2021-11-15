@@ -15,19 +15,23 @@ export interface Props extends BaseProps {
 }
 
 const ID_Style = {
-  1: {
+  // Seattle
+  4: {
     top: '40%',
     left: '14%'
   },
+  // Jinhua
   2: {
     top: '31%',
     left: '46%'
   },
-  3: {
+  // Shanghai
+  1: {
     top: '39%',
     left: '84%'
   },
-  4: {
+  // Singapore
+  3: {
     top: '74%',
     left: '88%'
   },
@@ -117,6 +121,7 @@ function WorldMap_(p: Props) {
         <TitleTwo>Results from:<span>IPFS Peers</span></TitleTwo>
         <TitleTwo2>{totalReplicas}<span>Replicas Found</span></TitleTwo2>
       </div>
+      <div className="flex1"/>
       <div className="current_gateway">
         <TitleTwo3>
           Details from:<span>{currentGateway.name}</span> gateway
@@ -166,6 +171,8 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
 
   .info_content {
     width: 31rem;
+    display: flex;
+    flex-direction: column;
 
     .current_gateway {
       margin-top: 5.7rem;

@@ -77,8 +77,9 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
   overflow: visible;
   width: 0;
   height: 0;
-  z-index: 10;
 
+  ${({active}) => `z-index:${active ? 11 : 10};`};
+  
   .dot_round {
     z-index: 4;
     position: absolute;
