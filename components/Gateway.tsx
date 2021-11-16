@@ -58,7 +58,7 @@ function Gateway_(p: Props) {
           top: -(panelOffSize + 128 + 22),
         }}>
         <div className="title">
-          Reported by<span className="name">{data.name}</span>gateway:
+          Reported by<span className="name">{data.is_thunder ? '⚡ ' : ''}{data.name}</span><br/>gateway:
         </div>
         <div className="flex1"/>
         <div className="location_peers">
@@ -79,7 +79,7 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
   height: 0;
 
   ${({active}) => `z-index:${active ? 11 : 10};`};
-  
+
   .dot_round {
     z-index: 4;
     position: absolute;
@@ -109,7 +109,7 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
   }
 
   .info_panel {
-    width: 300px;
+    width: 308px;
     height: 128px;
     border-radius: 16px;
     background-color: white;
@@ -121,6 +121,7 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
     animation: showInfo 1s ease-in-out 1;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
     .title {
       font-size: 16px;

@@ -36,9 +36,9 @@ function PinningService_(p: Props) {
         Whoops! No replica reported from trusted pinning services.<br/>
         Want to get more IPFS replicas and longer (even permanent) storage guaranteed for your file/data?<br/>
         <br/>
-        Use <a target="_blank" href="https://files.appacrust.net" rel="noreferrer">Crust Files</a> or learn more from <a target="_blank"
-                                                                                                        href="https://" rel="noreferrer">this
-        guide</a>.
+        Use <a target="_blank" href="https://files.crustapps.net" rel="noreferrer">Crust Files</a> or learn more from <a
+        target="_blank"
+        href="https://wiki.crust.network/docs/en/storageUserGuide" rel="noreferrer">this guide</a>.
       </div>
     }
     {
@@ -73,12 +73,14 @@ function PinningService_(p: Props) {
           </div>
 
           <LabelText className="mr-t1">MORE ACTION</LabelText>
-          <a className="to_link" target="_blank" href={`https://apps.crust.network/?rpc=wss%3A%2F%2Frpc.crust.network/#/storage_files/status/${cid}`} rel="noreferrer">
+          <a className="to_link" target="_blank"
+             href={`https://apps.crust.network/?rpc=wss%3A%2F%2Frpc.crust.network/#/storage_files/status/${cid}`}
+             rel="noreferrer">
             Want more replicas and duration guaranteed?<br/>
             Visit more info about this CID in Crust Apps
           </a>
           <a className="to_link to_ps_docs" target="_blank"
-             href="https://github.com/decooio/ipfsscan/blob/main/docs/trusted-pinning-service.md" rel="noreferrer">
+             href="https://github.com/crustio/ipfsscan/blob/main/docs/trusted-pinning-service.md" rel="noreferrer">
             Want to apply for a Trusted Pinning Service?
           </a>
         </div>

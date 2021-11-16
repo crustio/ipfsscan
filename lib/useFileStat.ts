@@ -1,10 +1,12 @@
 import {useApp} from "./AppContext";
 import {useCall} from "./hooks/useCall";
 import {BlockNumber} from "@polkadot/types/interfaces";
-import {useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {formatBalance} from "@polkadot/util";
 import {useFilePrice} from "./useFilePrice";
 import BN from "bn.js";
+import {ApiPromise} from "@polkadot/api";
+import _ from 'lodash';
 
 export type Status = 'Loading' | 'Submitted' | 'Expired' | 'Success' | 'Failed';
 
@@ -41,17 +43,29 @@ function parseStat(stat: any): FileStat | null {
   }
 }
 
+function useMemoBestNumber(api?: ApiPromise): number {
+  const bestNum = useCall<BlockNumber>(api?.derive?.chain?.bestNumber) || 0;
+  const bestNumber = bestNum && bestNum.toNumber()
+  const [num, setNum] = useState(bestNumber)
+  useEffect(() => {
+    if (bestNumber && bestNumber - num > 14400) {
+      setNum(bestNumber)
+    }
+  })
+  return num
+}
+
 export function useFileStat(cid: string): FStat {
   const {api} = useApp()
   const queryFileApi = api && api.query?.market && api.query?.market.files
   const stat = useCall<{ isEmpty: boolean } | undefined | null>(queryFileApi, [cid])
-  const bestNum = useCall<BlockNumber>(api?.derive?.chain?.bestNumber);
-  const bestNumber = bestNum && bestNum.toNumber()
+  const bestNumber = useMemoBestNumber(api)
   const fileStat = useMemo<FStat>(() => {
     const fStat: FStat = {status: 'Loading'}
     if (stat && !stat.isEmpty) {
       const ps = parseStat(stat)
       if (ps) {
+        ps.replicas = ps.replicas.filter(item => item.is_reported)
         fStat.file = ps
         fStat.pool = formatBalance(ps.prepaid, {decimals: 12, forceUnit: 'CRU'})
         const {expired_at, reported_replica_count} = ps

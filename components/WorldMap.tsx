@@ -15,25 +15,25 @@ export interface Props extends BaseProps {
 }
 
 const ID_Style = {
-  // Seattle
-  4: {
-    top: '40%',
-    left: '14%'
-  },
-  // Jinhua
-  2: {
-    top: '31%',
-    left: '46%'
-  },
   // Shanghai
   1: {
     top: '39%',
     left: '84%'
   },
+  // Jinhua
+  2: {
+    top: '41%',
+    left: '83%'
+  },
   // Singapore
   3: {
-    top: '74%',
-    left: '88%'
+    top: '65%',
+    left: '78%'
+  },
+  // Seattle
+  4: {
+    top: '40%',
+    left: '14%'
   },
 }
 

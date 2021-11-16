@@ -4,7 +4,7 @@ import classNames from "classnames";
 import {BasePropsWithChildren} from "./types";
 import styled from "styled-components";
 
-const siteTitle = 'A basic framework use next.js'
+const siteTitle = 'IPFS SCAN'
 
 export interface Props extends BasePropsWithChildren {
   title?: string
@@ -25,6 +25,7 @@ function Page_(p: Props) {
           content="Base Next"
         />
         <meta name="og:title" content={title}/>
+        <title>{title}</title>
       </Head>
       <div className='page'>
         {children}

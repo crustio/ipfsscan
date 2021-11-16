@@ -11,6 +11,7 @@ function LoadingItem_(p: BaseProps) {
 export const LoadingItem = React.memo<BaseProps>(styled(LoadingItem_)`
   width: 100%;
   height: 100%;
+  min-width: 100rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,6 +27,7 @@ export const LoadingItem = React.memo<BaseProps>(styled(LoadingItem_)`
   }
 
   span.cru-fo {
+    font-size: 2.5rem;
     animation: rotate 1s ease-in-out infinite;
   }
 `)

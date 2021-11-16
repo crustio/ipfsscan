@@ -14,6 +14,7 @@ export interface GatewayItem {
   country?: string,
   baseUrl: string,
   id: number,
+  is_thunder: number,
   latitude: string,
   longitude: string
 }
