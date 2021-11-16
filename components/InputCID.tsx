@@ -60,6 +60,10 @@ export const InputCID = React.memo<Props>(styled(InputCID_)`
     padding: 1.45rem 3rem 1.45rem 1.2rem !important;
   }
 
+  input::selection {
+    color: #c6c6c6;
+  }
+
   .icon {
     z-index: 1;
     font-size: 30px;
