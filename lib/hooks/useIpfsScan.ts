@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {GatewayList, isDev} from "../constans";
 import axios, {CancelTokenSource} from "axios";
-import ip from "ip-regex";
 
 export interface IpfsScan {
   gatewayId: number,
@@ -42,17 +41,14 @@ function parseData(data: any): any[] {
   }
 }
 
-export function useIpfsScan(cid: String): IpfsScan[] {
+export function useIpfsScan(cid: string): IpfsScan[] {
   const [scans, setScans] = useState<IpfsScan[]>([])
-
   const updateScan = (scan: UpdateIpfsScan) => {
-    setScans((oldScans) => {
-      const find = oldScans.find(item => item.gatewayId === scan.gatewayId)
-      if (find) {
-        return oldScans.filter(item => item.gatewayId !== scan.gatewayId).concat([{...find, ...scan}])
-      }
-      return oldScans
-    })
+    setScans((oldScans) => oldScans.map<IpfsScan>(item => {
+      if (item.gatewayId === scan.gatewayId)
+        return {...item, ...scan}
+      return item
+    }))
   }
   // init data
   useEffect(() => {
@@ -70,7 +66,7 @@ export function useIpfsScan(cid: String): IpfsScan[] {
   useEffect(() => {
     const tasks: CancelTokenSource[] = []
     if (cid) {
-      for (let ipfsGateway of GatewayList) {
+      for (const ipfsGateway of GatewayList) {
         // dht/findprovs
         const findTask = axios.CancelToken.source()
         tasks.push(findTask)
@@ -103,7 +99,7 @@ export function useIpfsScan(cid: String): IpfsScan[] {
       }
     }
     return () => {
-      for (let task of tasks) {
+      for (const task of tasks) {
         try {
           task.cancel()
         } catch (e) {
