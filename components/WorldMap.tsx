@@ -138,7 +138,8 @@ function WorldMap_(p: Props) {
           }
         </div>
       </div>
-      <a target="_blank" href="https://" rel="noreferrer">How to contribute a gateway?</a>
+      <a target="_blank" href="https://github.com/crustio/ipfsscan/blob/main/docs/contribute-gateway.md"
+         rel="noreferrer">How to contribute a gateway?</a>
     </div>
     <div className="map">
       <MapSvg/>

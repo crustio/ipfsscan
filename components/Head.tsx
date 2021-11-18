@@ -11,10 +11,10 @@ export interface Props extends BaseProps {
 function Head_(p: Props) {
   const {className, cid} = p
   const r = useRouter();
-
+  const toHome = () => r.push('/')
   return <div className={className}>
     <div className="left">
-      <img className="logo" src="/images/ipfs_scan_logo.png"/>
+      <img className="logo" src="/images/ipfs_scan_logo.png" onClick={toHome}/>
     </div>
     {cid && <InputCID defCid={r.query.cid as string}/>}
   </div>
@@ -33,6 +33,7 @@ export const Head = React.memo<Props>(styled(Head_)`
     flex: 1;
 
     .logo {
+      cursor: pointer;
       margin-left: 60px;
       height: 44px;
       object-fit: contain;
@@ -58,6 +59,6 @@ export const Head = React.memo<Props>(styled(Head_)`
       right: 12px;
     }
   }
-  
+
 `)
 export default Head
