@@ -9,6 +9,7 @@ import {TitleTwo, TitleTwo2, TitleTwo3} from "./texts";
 import {IpfsScan, useIpfsScan} from "../lib/hooks/useIpfsScan";
 import {IpfsGateway} from "../lib/types";
 import {GatewayList} from "../lib/constans";
+import classNames from "classnames";
 
 export interface Props extends BaseProps {
   CID: string
@@ -46,6 +47,14 @@ function WorldMap_(p: Props) {
   const {className, CID} = p
   const [currentGatewayId, setCurrentGatewayID] = useState<number | null>(null)
   const scans = useIpfsScan(CID);
+  // isLoad
+  const isLoadAvailable = useMemo(() => {
+    return !!scans.filter(item => item.isLoadDag).length
+  }, [scans])
+  const isLoadPeers = useMemo(() => {
+    return !!scans.filter(item => item.isLoadPeers).length
+  }, [scans])
+
   const availableNum = useMemo(() => {
     return scans.filter((item) => !!item.dag).length
   }, [scans])
@@ -94,9 +103,13 @@ function WorldMap_(p: Props) {
   return <div className={className}>
     <div className="info_content">
       <div className="total_peers">
-        <TitleTwo>Results from:<span>IPFS Peers</span></TitleTwo>
-        <TitleTwo2>Available at <span>{`${availableNum}/${scans.length}`}</span> Peers</TitleTwo2>
-        <TitleTwo2><span>{totalReplicas}</span> Replicas Found</TitleTwo2>
+        <TitleTwo>Results from: <span>IPFS Peers</span></TitleTwo>
+        <TitleTwo2>Available at <span className={classNames({textLoadAnim: isLoadAvailable})}>
+          {`${availableNum}/${scans.length}`}</span> Peers
+        </TitleTwo2>
+        <TitleTwo2>
+          <span className={classNames({textLoadAnim: isLoadPeers})}>{totalReplicas}</span> Replicas Found
+        </TitleTwo2>
       </div>
       <div className="flex1"/>
       <div className="current_gateway">
@@ -125,7 +138,7 @@ function WorldMap_(p: Props) {
           }
         </div>
       </div>
-      <a target="_blank" href="https://hhhhh" rel="noreferrer">How to contribute a gateway?</a>
+      <a target="_blank" href="https://" rel="noreferrer">How to contribute a gateway?</a>
     </div>
     <div className="map">
       <MapSvg/>
@@ -144,6 +157,19 @@ function WorldMap_(p: Props) {
 }
 
 export const WorldMap = React.memo<Props>(styled(WorldMap_)`
+  @keyframes textLoad {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0.5;
+    }
+  }
+
+  .textLoadAnim {
+    animation: textLoad 500ms ease-in-out infinite reverse;
+  }
+
   width: 100%;
   padding: 40px;
   display: flex;

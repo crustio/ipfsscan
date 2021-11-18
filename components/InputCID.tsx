@@ -20,8 +20,7 @@ function InputCID_(p: Props) {
       r.push('/')
       return;
     }
-    const isCid = isCID(CID)
-    if (!isCid) {
+    if (!isCID(CID)) {
       console.error('CID not true')
       return
     }
