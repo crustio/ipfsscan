@@ -38,7 +38,7 @@ export default function App({Component, pageProps}: AppProps) {
   const appType = useMemo<AppType>(() => ({api}), [api])
   if (!init) return <Container className="hFull">
     <Dimmer active inverted>
-      <Loader size='large' inverted content="Loading"/>
+      <Loader size="large" inverted content="Loading"/>
     </Dimmer>
   </Container>
   return <AppProvider value={appType}>

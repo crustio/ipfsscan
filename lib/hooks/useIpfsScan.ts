@@ -73,6 +73,7 @@ export function useIpfsScan(cid: string): IpfsScan[] {
         const params = isDev ? '&num-providers=5' : ''
         axios.post<string>(`${ipfsGateway.value}/api/v0/dht/findprovs?arg=${cid}&verbose=false&${params}`, {}, {
           cancelToken: findTask.token,
+          timeout: 300000
         })
           .then(res => {
             const peers = parseData(res.data).filter(item => item?.Type === 4)
