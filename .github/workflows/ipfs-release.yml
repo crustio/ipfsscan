@@ -1,4 +1,4 @@
-name: Crust Files Deploy
+name: IPFS-SCAN-Prod
 on:
   workflow_dispatch:
 
