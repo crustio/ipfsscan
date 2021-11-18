@@ -16,17 +16,17 @@ export const TitleTwo = React.memo<BasePropsWithChildren>(styled.div`
 `)
 
 export const TitleTwo2 = styled(TitleTwo)`
-  color: #6ACAD1;
-  font-size: 3.14rem;
-  line-height: 3.14rem;
   margin-top: 1.7rem;
+  color: white;
+  font-size: 1.7rem;
+  line-height: 1.94rem;
 
   span {
-    font-weight: normal;
-    color: white;
-    font-size: 1.7rem;
-    line-height: 1.94rem;
     vertical-align: baseline;
+    color: #6ACAD1;
+    font-size: 3.14rem;
+    line-height: 3.14rem;
+    margin: 0rem;
   }
 `
 export const TitleTwo3 = styled(TitleTwo)`
@@ -50,6 +50,27 @@ export const TitleTwo4 = styled(TitleTwo)`
     margin-left: 0;
     margin-right: 10px;
   }
+`
+
+export const TitleTwo5 = styled.div`
+  font-size: 16px;
+  line-height: 22px;
+  font-family: OpenSans-Bold;
+
+  span {
+    color: #FF8D00;
+  }
+`
+
+export const TitleTwo6 = styled.div`
+  font-size: 14px;
+  line-height: 19px;
+
+  span {
+    font-family: OpenSans-Bold;
+    color: #FF8D00;
+  }
+
 `
 
 export const LabelText = styled.div`

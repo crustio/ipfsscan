@@ -1,36 +1,45 @@
 import React, {useCallback, useMemo} from "react";
-import {BaseProps, GatewayInfo} from "./types";
+import {BaseProps} from "./types";
 import styled from "styled-components";
 import classNames from "classnames";
+import {IpfsScan} from "../lib/hooks/useIpfsScan";
+import {IpfsGateway} from "../lib/types";
+import {TitleTwo5, TitleTwo6} from "./texts";
 
 export interface Props extends BaseProps {
-  data: GatewayInfo,
+  data: [IpfsGateway, IpfsScan],
   position: {
     top: string,
     left: string
   },
   active: boolean,
-  loading: boolean
   onClick?: (id: number) => void
 }
 
 const MAX = 50;
 const MIN = 10
 
+export function getLocationName(gate: IpfsGateway): string {
+  if (gate.country) return `${gate.city}, ${gate.country}`
+  return gate.city
+}
+
 function Gateway_(p: Props) {
-  const {className, data, position, active, onClick, loading} = p
+  const {className, data, position, active, onClick} = p
+  const [gate, scan] = data
+  const loading = scan.isLoadDag || scan.isLoadPeers
   const size = useMemo<number>(() => {
-    const count = data.peers.length
+    const count = scan.peers.length
     if (count === 0) return 0
-    const s = Math.round(data.peers.length * MAX / 50)
+    const s = Math.round(scan.peers.length * MAX / 50)
     if (s < MIN) return MIN
     return s
-  }, [data.peers])
+  }, [scan.peers])
 
   const showRound = size >= MIN
   const panelOffSize = Math.max(size, 5)
   const _onClick = useCallback(() => {
-    if (onClick && !active) onClick(data.id)
+    if (onClick && !active) onClick(gate.id)
   }, [onClick, data, active])
 
   return <div className={className} style={position}>
@@ -55,17 +64,17 @@ function Gateway_(p: Props) {
         onClick={_onClick}
         style={{
           left: -150,
-          top: -(panelOffSize + 128 + 22),
+          top: -(panelOffSize + 142 + 22),
         }}>
-        <div className="title">
-          Reported by<span className="name">{data.is_thunder ? '⚡ ' : ''}{data.name}</span><br/>gateway:
+        <TitleTwo5 className="title">Reported gateway: <span>{gate.name}</span></TitleTwo5>
+        <div className="location text">
+          <span className="cru-fo cru-fo-map-pin"/> {getLocationName(gate)}
         </div>
         <div className="flex1"/>
-        <div className="location_peers">
-          {`${data.city ? data.city + ',' : ""}`}{data.country}<br/>
-          <span className="count">{data.peers.length}</span>
-          IPFS Peers found available for this file.
-        </div>
+        <div className="line"/>
+        <div className="flex1"/>
+        <TitleTwo6 className="text">Availability: <span>{scan.dag ? 'YES' : 'NO'}</span></TitleTwo6>
+        <TitleTwo6 className="text">Peers with a replica: <span>{scan.peers.length}</span></TitleTwo6>
         <div className="arrow"/>
       </div>
     }
@@ -110,7 +119,7 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
 
   .info_panel {
     width: 308px;
-    height: 128px;
+    height: 142px;
     border-radius: 16px;
     background-color: white;
     padding: 16px;
@@ -122,26 +131,27 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
     display: flex;
     flex-direction: column;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 2px solid #3D8F96;
 
-    .title {
-      font-size: 16px;
-      line-height: 22px;
-      font-weight: bold;
-
-      .name {
-        color: #FF8D00;
-        margin: 0 6px;
-      }
+    .line {
+      width: 100%;
+      height: 1px;
+      background-color: #eeeeee;
     }
 
-    .location_peers {
+    .text {
+      color: #666666;
+    }
+
+    .location {
       font-size: 14px;
       line-height: 19px;
-      color: #666666;
+      margin-top: 5px;
 
-      .count {
-        color: #FF8D00;
-        margin-right: 6px;
+      .cru-fo {
+        position: relative;
+        font-size: 16px;
+        top: 2px;
       }
     }
 
@@ -149,16 +159,24 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
       width: 20px;
       height: 20px;
       position: absolute;
-      bottom: -10px;
+      bottom: -11px;
       left: 140px;
       transform: rotate(45deg);
       background-color: white;
+      border-bottom: 2px solid #3D8F96;
+      border-right: 2px solid #3D8F96;
     }
   }
 
   .info_panel.active {
     background-color: #3D8F96;;
-    color: white;
+
+    &, .text {
+      color: white !important;
+    }
+    .line {
+      background-color: rgba(238, 238, 238, 0.5);
+    }
 
     .arrow {
       background-color: #3D8F96;;

@@ -24,7 +24,7 @@ html,
 body {
     padding: 0;
     margin: 0;
-    font-family: "OpenSans";
+    font-family: OpenSans;
     font-size: 14px;
     color: var(--main-color);
     background: linear-gradient(180deg, #041727 0%, #062B3F 100%) !important;

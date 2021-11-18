@@ -1,37 +1,41 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {BaseProps, GatewayInfo, GatewayItem, Peer} from "./types";
+import {BaseProps} from "./types";
 import styled from "styled-components";
 import MapSvg from "./MapSvg";
-import {isCID} from "../lib/utils";
-import axios, {CancelTokenSource} from "axios";
-import {BaseUrl} from "../lib/constans";
 import _ from 'lodash';
 import {LoadingPeers} from "./LoadingPeers";
-import {Gateway} from "./Gateway"
+import {Gateway, getLocationName} from "./Gateway"
 import {TitleTwo, TitleTwo2, TitleTwo3} from "./texts";
+import {IpfsScan, useIpfsScan} from "../lib/hooks/useIpfsScan";
+import {IpfsGateway} from "../lib/types";
+import {GatewayList} from "../lib/constans";
 
 export interface Props extends BaseProps {
   CID: string
 }
 
-const ID_Style = {
+const City_Style = {
+  Local: {
+    top: '39%',
+    left: '84%'
+  },
   // Shanghai
-  1: {
+  Shanghai: {
     top: '39%',
     left: '84%'
   },
   // Jinhua
-  2: {
+  Jinhua: {
     top: '41%',
     left: '83%'
   },
   // Singapore
-  3: {
+  Singapore: {
     top: '65%',
     left: '78%'
   },
   // Seattle
-  4: {
+  Seattle: {
     top: '40%',
     left: '14%'
   },
@@ -40,86 +44,59 @@ const ID_Style = {
 
 function WorldMap_(p: Props) {
   const {className, CID} = p
-  const [loading, setLoading] = useState(true)
-  const [gatewayList, setGatewayList] = useState<GatewayItem[]>([])
-  const [data, setData] = useState<GatewayInfo[]>([])
   const [currentGatewayId, setCurrentGatewayID] = useState<number | null>(null)
-  const currentGateway = useMemo<GatewayInfo | null>(() => {
+  const scans = useIpfsScan(CID);
+  const availableNum = useMemo(() => {
+    return scans.filter((item) => !!item.dag).length
+  }, [scans])
+  const currentGatewayScan = useMemo<IpfsScan | null>(() => {
+    console.info('scans:', scans)
     if (currentGatewayId) {
-      return data.find(item => item.id === currentGatewayId)
+      return scans.find(item => item.gatewayId === currentGatewayId)
     }
     return null
-  }, [currentGatewayId, data])
+  }, [currentGatewayId, scans])
+  const currentGateway = useMemo<IpfsGateway | null>(() => {
+    if (currentGatewayId) {
+      return GatewayList.find(item => item.id === currentGatewayId)
+    }
+    return null
+  }, [currentGatewayId])
+  const data = useMemo<[IpfsGateway, IpfsScan][]>(() => {
+    return scans.map((scan) => {
+      return [GatewayList.find(item => item.id === scan.gatewayId), scan]
+    })
+  }, [scans])
+
   const totalReplicas = useMemo(() => {
-    return _.chain(data)
+    return _.chain(scans)
       .reduce((a, b) => a.concat(b.peers), [])
       .map(item => item.id)
       .uniq()
       .value()
       .length
-  }, [data])
-  // load GatewayAll
-  useEffect(() => {
-    axios.get<GatewayItem[]>(`${BaseUrl}/gateway/all`)
-      .then((data) => {
-        setGatewayList(data.data)
-      })
-      .catch(console.error)
-  }, [])
-  // set First Select Gateway and Load GatewayInfos
-  useEffect(() => {
-    const cancelList: CancelTokenSource[] = []
-    const isCid = isCID(CID)
-    if (isCid && gatewayList.length) {
-      setLoading(true)
-      setCurrentGatewayID(null)
-      const list: GatewayInfo[] = gatewayList.map(item => {
-        return {...item, peers: [], loading: true}
-      });
-      setData(list)
-      for (const gatewayItem of gatewayList) {
-        const gatewayId = gatewayItem.id
-        const cancelTokenSource = axios.CancelToken.source()
-        cancelList.push(cancelTokenSource)
-        axios.post<Peer[]>(`${BaseUrl}/ipfs/dht/findprovs`, {
-          gatewayId,
-          cid: CID
-        }, {cancelToken: cancelTokenSource.token}).then(data => {
-          setData((old) => {
-            return _.map(old, item => {
-              if (item.id === gatewayId) {
-                return {...item, peers: data.data, loading: false}
-              }
-              return item
-            })
-          })
-          setCurrentGatewayID((oldId) => {
-            if (oldId) return oldId
-            return gatewayId
-          })
-        })
-          .then(() => setLoading(false))
-          .catch(console.error)
-      }
-    }
-    return () => {
-      try {
-        for (const cancelTokenSource of cancelList) {
-          cancelTokenSource.cancel()
-        }
-      } catch (e) {
-        console.error(e)
-      }
-    }
-  }, [CID, gatewayList])
+  }, [scans])
 
+  useEffect(() => {
+    if (!currentGatewayId) {
+      const find = scans.find(item => !item.isLoadPeers || !item.isLoadDag)
+      if (find) {
+        setCurrentGatewayID(find.gatewayId)
+      }
+    }
+  }, [scans])
+
+  const loading = useMemo(() => {
+    return !scans.find(item => !item.isLoadPeers || !item.isLoadDag)
+  }, [scans])
   if (!currentGateway || loading) return <LoadingPeers/>
 
   return <div className={className}>
     <div className="info_content">
       <div className="total_peers">
         <TitleTwo>Results from:<span>IPFS Peers</span></TitleTwo>
-        <TitleTwo2>{totalReplicas}<span>Replicas Found</span></TitleTwo2>
+        <TitleTwo2>Available at <span>{`${availableNum}/${scans.length}`}</span> Peers</TitleTwo2>
+        <TitleTwo2><span>{totalReplicas}</span> Replicas Found</TitleTwo2>
       </div>
       <div className="flex1"/>
       <div className="current_gateway">
@@ -128,17 +105,27 @@ function WorldMap_(p: Props) {
         </TitleTwo3>
         <div className="location">
           <span className="icon cru-fo-map-pin"/>
-          {`${currentGateway.city ?? ''} ${currentGateway.country}`}
+          {getLocationName(currentGateway)}
+        </div>
+        <TitleTwo3>
+          Availability: <span>{currentGatewayScan.dag ? 'YES' : 'NO'}</span>
+        </TitleTwo3>
+        <div className="availability_text">
+          {`Your file is ${currentGatewayScan.dag ? 'available' : 'unavailable'} at this gateway`}
+        </div>
+        <div className="peers_title">
+          The list of peers that have this file’s replica:
         </div>
         <div className="peers">
           {
-            currentGateway.peers.map((peer, index) =>
+            currentGatewayScan.peers.map((peer, index) =>
               <div className="item" key={`peers_${index}`}>
                 {`${index + 1}`}<span className="peer_id">{`Peer ID: ${peer.id}`}</span>
               </div>)
           }
         </div>
       </div>
+      <a target="_blank" href="https://hhhhh">How to contribute a gateway?</a>
     </div>
     <div className="map">
       <MapSvg/>
@@ -148,10 +135,9 @@ function WorldMap_(p: Props) {
             className="gateway scale"
             key={`gateway_${index}`}
             data={item}
-            position={ID_Style[item.id]}
+            position={City_Style[item[0].city]}
             onClick={setCurrentGatewayID}
-            loading={item.loading}
-            active={item.id === currentGateway.id}/>)
+            active={item[0].id === currentGateway.id}/>)
       }
     </div>
   </div>
@@ -184,14 +170,28 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
       .location {
         font-size: 1rem;
         line-height: 1rem;
-        margin: 1.1rem 1rem;
+        margin: 0.9rem 1rem 2.3857rem 0.9rem;
 
         .icon {
-          font-size: 1.7rem;
+          font-size: 1.14rem;
           margin-right: 0.7rem;
           position: relative;
-          top: 0.2857rem;
+          top: 0.14rem;
         }
+      }
+
+      .availability_text {
+        padding: 0.3rem 0 1.7rem 0;
+        margin: 0 1rem;
+        font-size: 1rem;
+        border-bottom: solid 1px rgba(238, 238, 238, 0.5);
+      }
+
+      .peers_title {
+        font-size: 1.14rem;
+        line-height: 1.57rem;
+        margin-top: 1.7rem;
+        margin-left: 1rem;
       }
 
       .peers {
@@ -199,7 +199,7 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
         color: #cccccc;
         font-size: 1rem;
         margin-top: 0.57rem;
-        height: 25.14rem;
+        height: calc(112px + 5.7857rem);
         overflow-y: auto;
 
         .item {
@@ -218,6 +218,13 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
           border-radius: 0.57rem;
         }
       }
+    }
+
+    a {
+      color: #CCCCCC;
+      margin-left: 1.7rem;
+      margin-top: 1rem;
+      text-decoration: #CCCCCC underline;
     }
   }
 
