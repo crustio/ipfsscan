@@ -125,7 +125,7 @@ function WorldMap_(p: Props) {
           }
         </div>
       </div>
-      <a target="_blank" href="https://hhhhh">How to contribute a gateway?</a>
+      <a target="_blank" href="https://hhhhh" rel="noreferrer">How to contribute a gateway?</a>
     </div>
     <div className="map">
       <MapSvg/>

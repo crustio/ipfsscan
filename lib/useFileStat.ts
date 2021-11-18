@@ -6,7 +6,6 @@ import {formatBalance} from "@polkadot/util";
 import {useFilePrice} from "./useFilePrice";
 import BN from "bn.js";
 import {ApiPromise} from "@polkadot/api";
-import _ from 'lodash';
 
 export type Status = 'Loading' | 'Submitted' | 'Expired' | 'Success' | 'Failed';
 
