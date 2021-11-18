@@ -88,7 +88,8 @@ export function useIpfsScan(cid: string): IpfsScan[] {
         const dagTask = axios.CancelToken.source()
         tasks.push(dagTask)
         axios.post<any>(`${ipfsGateway.value}/api/v0/dag/get?arg=${cid}`, {}, {
-          cancelToken: dagTask.token
+          cancelToken: dagTask.token,
+          timeout: 60000
         })
           .then(res => {
             updateScan({gatewayId: ipfsGateway.id, isLoadDag: false, dag: res.data})
