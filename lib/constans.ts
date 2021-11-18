@@ -22,31 +22,31 @@ const devList: IpfsGateway[] = [
 const prodList: IpfsGateway[] = [
   {
     id: 1,
-    name: "DCF",
-    city: "Singapore",
-    // country: "",
-    value: "https://crustipfs.xyz"
-  },
-  {
-    id: 2,
     name: "Crust Network",
     city: "Seattle",
     country: "America",
     value: "https://crustwebsites.net"
   },
   {
-    id: 3,
+    id: 2,
     name: "Crust Network",
     city: "Shanghai",
     country: "China",
     value: "https://ipfs-gw.decloud.foundation"
   },
   {
-    id: 4,
+    id: 3,
     name: "⚡ Thunder Gateway",
     city: "Jinhua",
     country: "China",
     value: "https://gw.crustapps.net"
+  },
+  {
+    id: 4,
+    name: "DCF",
+    city: "Singapore",
+    // country: "",
+    value: "https://crustipfs.xyz"
   },
 ]
 
