@@ -11,11 +11,11 @@ function LoadingItem_(p: BaseProps) {
 export const LoadingItem = React.memo<BaseProps>(styled(LoadingItem_)`
   width: 100%;
   height: 100%;
-  min-width: 100rem;
+  min-height: 40rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #062B3F;
+  //background-color: #062B3F;
   top: 0;
   left: 0;
   z-index: 1000;
