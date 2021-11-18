@@ -122,7 +122,7 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
     height: 142px;
     border-radius: 16px;
     background-color: white;
-    padding: 16px;
+    padding: 10px 14px;
     color: #333333;
     cursor: pointer;
     position: relative;
@@ -137,6 +137,7 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
       width: 100%;
       height: 1px;
       background-color: #eeeeee;
+      flex-shrink: 0;
     }
 
     .text {
