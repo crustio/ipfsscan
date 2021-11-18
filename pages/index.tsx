@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import Page from '../components/page'
 import {BaseProps} from "../components/types";
 import styled from 'styled-components';
@@ -10,38 +10,51 @@ import PinningService from "../components/PinningService";
 import InputCID from "../components/InputCID";
 import classNames from "classnames";
 import MapSvg from "../components/MapSvg";
+import {isCID} from "../lib/utils";
 
 function Home(p: BaseProps) {
   const {className} = p
   const r = useRouter()
   const CID = r.query.cid as string
+  const isCid = useMemo(() => isCID(CID), [CID])
 
   return (
     <Page className={classNames(className)}>
       {CID && <Head cid={CID}/>}
       <ContentLayout>
         {
-          CID ?
-            <>
-              <WorldMap CID={CID}/>
-              <PinningService cid={CID}/>
-            </> :
-            <div className="main_content">
-              <div className="bg">
-                <MapSvg/>
-              </div>
-              <div className="flex1"/>
-              <img className="logo" src="/images/ipfs_scan_logo.png"/>
-              <InputCID className={"input_cid"}/>
-              <div className="search-tip">
-                Please input a valid IPFS CID!
-                <a target="_blank" href="https://docs.ipfs.io/concepts/content-addressing/#identifier-formats" rel="noreferrer">
-                  What is an IPFS CID?
-                </a>
-              </div>
-              <div className="flex1"/>
+          isCid && <>
+            <WorldMap CID={CID}/>
+            <PinningService cid={CID}/>
+          </>}
+        {
+          !CID && <div className="main_content">
+            <div className="bg">
+              <MapSvg/>
             </div>
-        }
+            <div className="flex1"/>
+            <img className="logo" src="/images/ipfs_scan_logo.png"/>
+            <InputCID defCid={CID} className={"input_cid"}/>
+            <div className="search-tip">
+              Please input an IPFS CID.
+              <a target="_blank" href="https://docs.ipfs.io/concepts/content-addressing/#identifier-formats"
+                 rel="noreferrer">
+                What is an IPFS CID?
+              </a>
+            </div>
+            <div className="flex1"/>
+          </div>}
+        {
+          !isCid && CID && <div className="invalid_cid">
+            <span className="cru-fo-alert-circle"/>
+            <div className="search-tip">
+              Please input an valid IPFS CID!
+              <a target="_blank" href="https://docs.ipfs.io/concepts/content-addressing/#identifier-formats"
+                 rel="noreferrer">
+                What is an IPFS CID?
+              </a>
+            </div>
+          </div>}
       </ContentLayout>
     </Page>
   )
@@ -79,6 +92,7 @@ export default React.memo(styled(Home)`
       svg {
         width: 100%;
         height: auto;
+
         path {
           fill-opacity: 0.5;
         }
@@ -97,19 +111,34 @@ export default React.memo(styled(Home)`
       z-index: 1;
       width: 80%;
       max-width: 900px;
-    }
 
-    .search-tip {
-      z-index: 1;
-      font-size: 1.2857rem;
-      margin-top: 1.7rem;
-      color: white;
-
-      a {
-        margin-left: 1rem;
+      input::selection {
+        color: #333333;
       }
     }
 
+  }
+
+  .invalid_cid {
+    width: 100%;
+    margin-top: 18.57rem;
+    text-align: center;
+
+    span {
+      font-size: 10rem;
+      color: #516E77;
+    }
+  }
+
+  .search-tip {
+    z-index: 1;
+    font-size: 1.4285rem;
+    margin-top: 1.7rem;
+    color: white;
+
+    a {
+      margin-left: 1rem;
+    }
   }
 
 `)

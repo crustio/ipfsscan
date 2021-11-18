@@ -5,7 +5,6 @@ import {useRouter} from "next/router";
 import styled from "styled-components";
 import classNames from "classnames";
 import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
-import {isCID} from "../lib/utils";
 
 export interface Props extends BaseProps {
   defCid?: string
@@ -15,15 +14,16 @@ function InputCID_(p: Props) {
   const {className, defCid} = p
   const r = useRouter()
   const [CID, setCID] = useState(defCid)
+  // const {alert} = useApp()
   const _onClickSearch = useCallback(() => {
     if (!CID) {
       r.push('/')
       return;
     }
-    if (!isCID(CID)) {
-      console.error('CID not true')
-      return
-    }
+    // if (!isCID(CID)){
+    //   alert.error("Please input a valid IPFS CID!")
+    //   return;
+    // }
     r.push(`/?cid=${CID}`)
   }, [r, CID])
 
