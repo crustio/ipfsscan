@@ -25,10 +25,10 @@ const City_Style = {
     top: '39%',
     left: '84%'
   },
-  // Jinhua
-  Jinhua: {
+  // Berlin
+  Berlin: {
     top: '41%',
-    left: '83%'
+    left: '50%'
   },
   // Singapore
   Singapore: {

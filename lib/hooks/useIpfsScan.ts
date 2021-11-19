@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
 import {GatewayList, isDev} from "../constans";
 import axios, {CancelTokenSource} from "axios";
+import _ from 'lodash';
 
 export interface IpfsScan {
   gatewayId: number,
-  peers: any[]
+  peers: Peer[]
   isLoadPeers: boolean,
 
   isLoadDag: boolean,
@@ -45,8 +46,12 @@ export function useIpfsScan(cid: string): IpfsScan[] {
   const [scans, setScans] = useState<IpfsScan[]>([])
   const updateScan = (scan: UpdateIpfsScan) => {
     setScans((oldScans) => oldScans.map<IpfsScan>(item => {
-      if (item.gatewayId === scan.gatewayId)
+      if (item.gatewayId === scan.gatewayId) {
+        if (item.peers.length && scan.peers) {
+          scan.peers = _.uniqBy(item.peers.concat(scan.peers), 'id')
+        }
         return {...item, ...scan}
+      }
       return item
     }))
   }
@@ -93,7 +98,7 @@ export function useIpfsScan(cid: string): IpfsScan[] {
           timeout: 60000
         })
           .then(res => {
-            updateScan({gatewayId: ipfsGateway.id, isLoadDag: false, dag: res.data})
+            updateScan({gatewayId: ipfsGateway.id, isLoadDag: false, dag: res.data, peers: [{id: ipfsGateway.peerId}]})
           })
           .catch(() => {
             updateScan({gatewayId: ipfsGateway.id, isLoadDag: false, dag: null})
