@@ -1,13 +1,14 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {BaseProps} from "./types";
 import styled from "styled-components";
-import {useFileStat} from "../lib/useFileStat";
+import {FStat} from "../lib/useFileStat";
 import {LabelText, TitleTwo, TitleTwo4} from "./texts";
 import {LoadingItem} from "./LoadingItem";
 import filesize from "filesize";
 
 export interface Props extends BaseProps {
-  cid: string
+  cid: string,
+  fStat: FStat,
 }
 
 function formatSize(size: number) {
@@ -15,16 +16,20 @@ function formatSize(size: number) {
 }
 
 function formatTime(months = 0) {
+  console.info('months::', months)
+  if (!months && months !== 0) return '-'
   if (months < 12) return `${months} Months`
   if (months < 11988) return `${Math.round(months / 12)} Years`
   return `999+ Years`
 }
 
 function PinningService_(p: Props) {
-  const {className, cid} = p
-  const fStat = useFileStat(cid)
+  const {className, cid, fStat} = p
+
 
   const notAvailable = fStat.status !== "Loading" && fStat.status !== "Success"
+
+  const formatSG = useMemo(() => formatTime(fStat.months), [fStat.months])
 
   return <div className={className}>
     <TitleTwo>Results from:<span>IPFS Pinning Service</span></TitleTwo>
@@ -53,7 +58,7 @@ function PinningService_(p: Props) {
             <span>{fStat.file.reported_replica_count}</span>Replicas available
           </TitleTwo4>
           <TitleTwo4>
-            <span>{formatTime(fStat.months)}</span>Storage Guaranteed
+            <span>{formatSG}</span>Storage Guaranteed
           </TitleTwo4>
 
           <LabelText className="mr-t1">

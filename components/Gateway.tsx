@@ -74,7 +74,7 @@ function Gateway_(p: Props) {
         <div className="line"/>
         <div className="flex1"/>
         <TitleTwo6 className="text">Availability: <span>{scan.dag ? 'YES' : 'NO'}</span></TitleTwo6>
-        <TitleTwo6 className="text">Peers with a replica: <span>{scan.peers.length}</span></TitleTwo6>
+        <TitleTwo6 className="text">/api/v0/dht/findprovs returns: <span>{scan.peers.length}</span> peers</TitleTwo6>
         <div className="arrow"/>
       </div>
     }

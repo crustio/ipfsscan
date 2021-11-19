@@ -2,7 +2,6 @@ import React, {useEffect, useMemo, useState} from "react";
 import {BaseProps} from "./types";
 import styled from "styled-components";
 import MapSvg from "./MapSvg";
-import _ from 'lodash';
 import {LoadingPeers} from "./LoadingPeers";
 import {Gateway, getLocationName} from "./Gateway"
 import {TitleTwo, TitleTwo2, TitleTwo3} from "./texts";
@@ -10,9 +9,11 @@ import {IpfsScan, useIpfsScan} from "../lib/hooks/useIpfsScan";
 import {IpfsGateway} from "../lib/types";
 import {GatewayList} from "../lib/constans";
 import classNames from "classnames";
+import {FStat} from "../lib/useFileStat";
 
 export interface Props extends BaseProps {
-  CID: string
+  CID: string,
+  fStat: FStat
 }
 
 const City_Style = {
@@ -44,16 +45,17 @@ const City_Style = {
 
 
 function WorldMap_(p: Props) {
-  const {className, CID} = p
+  const {className, CID, fStat} = p
+  const showReplicas = fStat.status === "Success"
   const [currentGatewayId, setCurrentGatewayID] = useState<number | null>(null)
   const scans = useIpfsScan(CID);
   // isLoad
   const isLoadAvailable = useMemo(() => {
     return !!scans.filter(item => item.isLoadDag).length
   }, [scans])
-  const isLoadPeers = useMemo(() => {
-    return !!scans.filter(item => item.isLoadPeers).length
-  }, [scans])
+  // const isLoadPeers = useMemo(() => {
+  //   return !!scans.filter(item => item.isLoadPeers).length
+  // }, [scans])
 
   const availableNum = useMemo(() => {
     return scans.filter((item) => !!item.dag).length
@@ -77,14 +79,14 @@ function WorldMap_(p: Props) {
     })
   }, [scans])
 
-  const totalReplicas = useMemo(() => {
-    return _.chain(scans)
-      .reduce((a, b) => a.concat(b.peers), [])
-      .map(item => item.id)
-      .uniq()
-      .value()
-      .length
-  }, [scans])
+  // const totalReplicas = useMemo(() => {
+  //   return _.chain(scans)
+  //     .reduce((a, b) => a.concat(b.peers), [])
+  //     .map(item => item.id)
+  //     .uniq()
+  //     .value()
+  //     .length
+  // }, [scans])
 
   useEffect(() => {
     if (!currentGatewayId) {
@@ -104,12 +106,13 @@ function WorldMap_(p: Props) {
     <div className="info_content">
       <div className="total_peers">
         <TitleTwo>Results from: <span>IPFS Peers</span></TitleTwo>
-        <TitleTwo2>Available at <span className={classNames({textLoadAnim: isLoadAvailable})}>
-          {`${availableNum}/${scans.length}`}</span> Peers
+        <TitleTwo2>Verified at <span className={classNames({textLoadAnim: isLoadAvailable})}>
+          {`${availableNum}/${scans.length}`}</span> Locations
         </TitleTwo2>
-        <TitleTwo2>
-          <span className={classNames({textLoadAnim: isLoadPeers})}>{totalReplicas}</span> Replicas Found
-        </TitleTwo2>
+        {
+          showReplicas && <TitleTwo2>
+            <span>{fStat.file.reported_replica_count}</span> Replica Confirmed in Crust Network
+          </TitleTwo2>}
       </div>
       <div className="flex1"/>
       <div className="current_gateway">
@@ -127,7 +130,9 @@ function WorldMap_(p: Props) {
           {`Your file is ${currentGatewayScan.dag ? 'available' : 'unavailable'} at this gateway`}
         </div>
         <div className="peers_title">
-          The list of peers that have this file’s replica:
+          <a target="_blank"
+             href="https://docs.ipfs.io/reference/http/api/#api-v0-dht-findprovs"
+             rel="noreferrer">/api/v0/dht/findprovs</a> returns:
         </div>
         <div className="peers">
           {
@@ -186,7 +191,12 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
   .info_content {
     width: 31rem;
     display: flex;
+    z-index: 2;
     flex-direction: column;
+
+    .total_peers {
+      height: 10.7rem;
+    }
 
     .current_gateway {
       margin-top: 5.7rem;
@@ -220,6 +230,10 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
         line-height: 1.57rem;
         margin-top: 1.7rem;
         margin-left: 1rem;
+
+        a {
+          margin: 0 !important;
+        }
       }
 
       .peers {

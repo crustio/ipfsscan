@@ -98,7 +98,7 @@ export function useIpfsScan(cid: string): IpfsScan[] {
           timeout: 60000
         })
           .then(res => {
-            updateScan({gatewayId: ipfsGateway.id, isLoadDag: false, dag: res.data, peers: [{id: ipfsGateway.peerId}]})
+            updateScan({gatewayId: ipfsGateway.id, isLoadDag: false, dag: res.data})
           })
           .catch(() => {
             updateScan({gatewayId: ipfsGateway.id, isLoadDag: false, dag: null})
