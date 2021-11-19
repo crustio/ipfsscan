@@ -6,7 +6,7 @@ const devList: IpfsGateway[] = [
   {
     id: 1,
     name: "LocalIpfs",
-    city: "Local",
+    city: "Seattle",
     // country: "",
     value: "http://localhost:5002",
     peerId: "12D3KooWJ3ndg5ZuyQXNnhwv3StAkPCJyEesMbDNVfKxZa6p8rFS",

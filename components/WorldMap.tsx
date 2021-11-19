@@ -39,7 +39,7 @@ const City_Style = {
   // Seattle
   Seattle: {
     top: '40%',
-    left: '14%'
+    left: '15%'
   },
 }
 
@@ -111,7 +111,7 @@ function WorldMap_(p: Props) {
         </TitleTwo2>
         {
           showReplicas && <TitleTwo2>
-            <span>{fStat.file.reported_replica_count}</span> Replica Confirmed in Crust Network
+            <span>{fStat.file.reported_replica_count}</span> Replicas Confirmed in <br/>Crust Network
           </TitleTwo2>}
       </div>
       <div className="flex1"/>
