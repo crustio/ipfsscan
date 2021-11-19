@@ -99,7 +99,12 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
 
   .dot_anim {
     animation: dotAnim 1s linear infinite;
+    animation-delay: 20ms;
     z-index: 5;
+    left: -0.3rem;
+    top: -0.3rem;
+    width: 0.6rem;
+    height: 0.6rem;
     position: absolute;
     border-radius: 2rem;
     border: solid 2px #6ACAD1;
@@ -175,6 +180,7 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
     &, .text {
       color: white !important;
     }
+
     .line {
       background-color: rgba(238, 238, 238, 0.5);
     }
@@ -190,18 +196,15 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
 
   @keyframes dotAnim {
     from {
-      left: -0.3rem;
-      top: -0.3rem;
-      width: 0.6rem;
-      height: 0.6rem;
-      opacity: 1;
+      opacity:1;
     }
+
     to {
       left: -2rem;
       top: -2rem;
       width: 4rem;
       height: 4rem;
-      opacity: 0.1;
+      opacity: 0;
     }
   }
 
