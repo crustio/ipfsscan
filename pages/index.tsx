@@ -11,12 +11,14 @@ import InputCID from "../components/InputCID";
 import classNames from "classnames";
 import MapSvg from "../components/MapSvg";
 import {isCID} from "../lib/utils";
+import {useFileStat} from "../lib/useFileStat";
 
 function Home(p: BaseProps) {
   const {className} = p
   const r = useRouter()
   const CID = r.query.cid as string
   const isCid = useMemo(() => isCID(CID), [CID])
+  const fStat = useFileStat(CID)
 
   return (
     <Page className={classNames(className)}>
@@ -24,8 +26,8 @@ function Home(p: BaseProps) {
       <ContentLayout>
         {
           isCid && <>
-            <WorldMap CID={CID}/>
-            <PinningService cid={CID}/>
+            <WorldMap CID={CID} fStat={fStat}/>
+            <PinningService cid={CID} fStat={fStat}/>
           </>}
         {
           !CID && <div className="main_content">
@@ -43,6 +45,7 @@ function Home(p: BaseProps) {
               </a>
             </div>
             <div className="flex1"/>
+            <div className="power_by">Powered by Crust Network</div>
           </div>}
         {
           !isCid && CID && <div className="invalid_cid">
@@ -88,6 +91,7 @@ export default React.memo(styled(Home)`
       align-items: center;
       z-index: 0;
       width: 100%;
+      max-height: 100vh;
 
       svg {
         width: 100%;
@@ -141,4 +145,9 @@ export default React.memo(styled(Home)`
     }
   }
 
+  .power_by {
+    font-size: 14px;
+    color: #8c8c8c;
+    margin-bottom: 14px;
+  }
 `)
