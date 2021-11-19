@@ -36,7 +36,8 @@ function PinningService_(p: Props) {
         Whoops! No replica reported from trusted pinning services.<br/>
         Want to get more IPFS replicas and longer (even permanent) storage guaranteed for your file/data?<br/>
         <br/>
-        Use <a target="_blank" href="https://files.crustapps.net" rel="noreferrer">Crust Files</a> or learn more from <a
+        Use <a target="_blank" href="https://apps.crust.network/?rpc=wss%3A%2F%2Frpc.crust.network/#/pins"
+               rel="noreferrer">Crust Pins</a> or learn more from <a
         target="_blank"
         href="https://wiki.crust.network/docs/en/storageUserGuide" rel="noreferrer">this guide</a>.
       </div>
