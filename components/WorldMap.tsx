@@ -169,6 +169,7 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
 
   .textLoadAnim {
     animation: textLoad 500ms ease-in-out infinite reverse;
+    animation-delay: 20ms;
   }
 
   width: 100%;
