@@ -3,6 +3,5 @@ export interface IpfsGateway {
   name: string,
   city: string,
   country?: string,
-  value: string,
-  peerId: string,
+  value: string
 }

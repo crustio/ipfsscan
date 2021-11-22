@@ -21,7 +21,8 @@ function AlertMessage(props: Props) {
   const {className} = props
   const {alert} = useContext(AppContext)
   const r = useRouter()
-  const isMain = (r.pathname === '' || r.pathname === '/')
+  // const isMain = (r.pathname === '' || r.pathname === '/')
+  const isMain = false;
   return <div className={classNames(className, {isMain})}>
     {
       alert.alerts.map((msg, index) =>
