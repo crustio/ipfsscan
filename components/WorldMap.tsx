@@ -6,6 +6,7 @@ import {LoadingPeers} from "./LoadingPeers";
 import {Gateway, getLocationName} from "./Gateway"
 import {TitleTwo, TitleTwo2, TitleTwo3} from "./texts";
 import {IpfsScan, useIpfsScan} from "../lib/hooks/useIpfsScan";
+import {useClipboard} from "../lib/hooks/useClipboard";
 import {IpfsGateway} from "../lib/types";
 import {GatewayList} from "../lib/constans";
 import classNames from "classnames";
@@ -49,6 +50,7 @@ function WorldMap_(p: Props) {
   const showReplicas = fStat.status === "Success"
   const [currentGatewayId, setCurrentGatewayID] = useState<number | null>(null)
   const scans = useIpfsScan(CID);
+  const copy = useClipboard();
   // isLoad
   const isLoadAvailable = useMemo(() => {
     return !!scans.filter(item => item.isLoadDag).length
@@ -102,6 +104,9 @@ function WorldMap_(p: Props) {
   }, [scans])
   if (!currentGateway || loading) return <LoadingPeers/>
 
+  const _onClickOpen = () => window.open(`${currentGateway.value}/ipfs/${CID}`, '_blank')
+  const _onClickCopy = () => copy(`${currentGateway.value}/ipfs/${CID}`)
+
   return <div className={className}>
     <div className="info_content">
       <div className="total_peers">
@@ -129,6 +134,14 @@ function WorldMap_(p: Props) {
         <div className="availability_text">
           {`Your file is ${currentGatewayScan.dag ? 'available' : 'unavailable'} at this gateway`}
         </div>
+        {
+          currentGatewayScan.dag && <div className="download_links_container">
+            <span className="download_links_item" onClick={_onClickOpen}>Open File</span>
+            <span className="download_links_item_separator"></span>
+            <span className="download_links_item" onClick={_onClickCopy}>Download Link</span>
+          </div>
+        }
+        <div className="separator"/>
         <div className="peers_title">
           <a target="_blank"
              href="https://docs.ipfs.io/reference/http/api/#api-v0-dht-findprovs"
@@ -219,9 +232,36 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
       }
 
       .availability_text {
-        padding: 0.3rem 0 1.7rem 0;
+        padding: 0.3rem 0 0.3rem 0;
         margin: 0 1rem;
         font-size: 1rem;
+      }
+
+      .download_links_container {
+        margin: 0 1rem;
+        padding: 0 0 0.3rem 0;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+      }
+
+      .download_links_item {
+        font-family: OpenSans;
+        font-size: 14px;
+        font-weight: 600;
+        color: #6ACAD1;
+        cursor: pointer;
+        text-decoration: #6ACAD1 underline;
+      }
+
+      .download_links_item_separator {
+        width: 24px;
+      }
+
+      .separator {
+        margin: 1rem 1rem 0 1rem;
         border-bottom: solid 1px rgba(238, 238, 238, 0.5);
       }
 
