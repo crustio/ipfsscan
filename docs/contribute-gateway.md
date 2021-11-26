@@ -30,7 +30,7 @@ Please fork this repo, and add your gateway to `constants.ts` with the following
   id: 1,
   name: "Crust Network",
   city: "Seattle",
-  country: "America",
+  country: "US",
   value: "https://crustwebsites.net"
 },
 // id:       your gateway index number

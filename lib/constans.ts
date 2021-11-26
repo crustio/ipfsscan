@@ -31,7 +31,7 @@ const prodList: IpfsGateway[] = [
     id: 1,
     name: "Crust Network",
     city: "Seattle",
-    country: "America",
+    country: "US",
     value: "https://crustwebsites.net"
   },
   {
