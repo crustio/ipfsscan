@@ -1,0 +1,27 @@
+name: Beta Release to Github Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    if: github.repository == 'decooio/ipfsscan'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run install
+        run: yarn install
+
+      - name: Build
+        run: yarn export
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: beta-deploy # The branch the action should deploy to.
+          folder: out # The folder the action should deploy.
+          target-folder: docs # The folder the action deploy to.
