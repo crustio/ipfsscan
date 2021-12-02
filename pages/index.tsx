@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import Page from '../components/page'
 import {BaseProps} from "../components/types";
 import styled from 'styled-components';
@@ -10,24 +10,31 @@ import PinningService from "../components/PinningService";
 import InputCID from "../components/InputCID";
 import classNames from "classnames";
 import MapSvg from "../components/MapSvg";
-import {isCID} from "../lib/utils";
+import {getCID} from "../lib/utils";
 import {useFileStat} from "../lib/useFileStat";
 
 function Home(p: BaseProps) {
   const {className} = p
   const r = useRouter()
   const CID = r.query.cid as string
-  const isCid = useMemo(() => isCID(CID), [CID])
-  const fStat = useFileStat(CID)
+  const [validCid, setValidCid] = useState<string>();
+  const isCid = useMemo(() => getCID(CID), [CID])
+  const fStat = useFileStat(validCid)
+
+  useEffect(() => {
+    getCID(CID).then(res => setValidCid(res))
+  }, [CID]);
+
+  console.log('validCid', validCid)
 
   return (
     <Page className={classNames(className)}>
       {CID && <Head cid={CID}/>}
       <ContentLayout>
         {
-          isCid && <>
-            <WorldMap CID={CID} fStat={fStat}/>
-            <PinningService cid={CID} fStat={fStat}/>
+          validCid && <>
+            <WorldMap CID={validCid} fStat={fStat}/>
+            <PinningService cid={validCid} fStat={fStat}/>
           </>}
         {
           !CID && <div className="main_content">
@@ -48,7 +55,7 @@ function Home(p: BaseProps) {
             <div className="power_by">Powered by Crust Network</div>
           </div>}
         {
-          !isCid && CID && <div className="invalid_cid">
+          !validCid && CID && <div className="invalid_cid">
             <span className="cru-fo-alert-circle"/>
             <div className="search-tip">
               Please input an valid IPFS CID!
