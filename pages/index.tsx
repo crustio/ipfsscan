@@ -18,14 +18,11 @@ function Home(p: BaseProps) {
   const r = useRouter()
   const CID = r.query.cid as string
   const [validCid, setValidCid] = useState<string>();
-  const isCid = useMemo(() => getCID(CID), [CID])
   const fStat = useFileStat(validCid)
 
   useEffect(() => {
     getCID(CID).then(res => setValidCid(res))
   }, [CID]);
-
-  console.log('validCid', validCid)
 
   return (
     <Page className={classNames(className)}>
