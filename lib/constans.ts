@@ -29,7 +29,7 @@ const devList: IpfsGateway[] = [
 const prodList: IpfsGateway[] = [
   {
     id: 1,
-    name: "Crust Network",
+    name: "⚡ Thunder Gateway",
     city: "Seattle",
     country: "US",
     value: "https://crustwebsites.net"
