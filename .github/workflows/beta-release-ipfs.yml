@@ -36,7 +36,7 @@ jobs:
       - name: Update DNS with new IPFS hash
         env:
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-          RECORD_DOMAIN: 'ipfsscan.decoo.io'
+          RECORD_DOMAIN: 'ipfsscan-ipfs.decoo.io'
           RECORD_NAME: '_dnslink'
           CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         uses: textileio/cloudflare-update-dnslink@0fe7b7a1ffc865db3a4da9773f0f987447ad5848
