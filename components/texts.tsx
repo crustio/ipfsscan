@@ -70,7 +70,10 @@ export const TitleTwo6 = styled.div`
     font-family: OpenSans-Bold;
     color: #FF8D00;
   }
+`
 
+export const TitleTwo7 = styled(TitleTwo4)`
+  white-space: normal;
 `
 
 export const LabelText = styled.div`

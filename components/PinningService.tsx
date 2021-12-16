@@ -2,7 +2,7 @@ import React, {useMemo} from "react";
 import {BaseProps} from "./types";
 import styled from "styled-components";
 import {FStat} from "../lib/useFileStat";
-import {LabelText, TitleTwo, TitleTwo4} from "./texts";
+import {LabelText, TitleTwo, TitleTwo4, TitleTwo7} from "./texts";
 import {LoadingItem} from "./LoadingItem";
 import filesize from "filesize";
 
@@ -57,9 +57,9 @@ function PinningService_(p: Props) {
           <TitleTwo4>
             <span>{fStat.file.reported_replica_count}</span>Replicas available
           </TitleTwo4>
-          <TitleTwo4>
+          <TitleTwo7>
             <span>{formatSG}</span>Storage Guaranteed
-          </TitleTwo4>
+          </TitleTwo7>
 
           <LabelText className="mr-t1">
             FILE INFO<span>On-Chain Data</span>
