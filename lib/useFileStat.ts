@@ -66,7 +66,7 @@ export function useFileStat(cid: string): FStat {
       if (ps) {
         ps.replicas = ps.replicas.filter(item => item.is_reported)
         fStat.file = ps
-        fStat.pool = formatBalance(ps.prepaid, {decimals: 12, forceUnit: 'CRU'})
+        fStat.pool = formatBalance(ps.prepaid, {decimals: 12, withUnit: 'CRU'})
         const {expired_at, reported_replica_count} = ps
         if (expired_at && expired_at < bestNumber) {
           // expired
