@@ -1,16 +1,16 @@
-import React, {useEffect, useMemo, useState} from "react";
-import {BaseProps} from "./types";
+import React, { useEffect, useMemo, useState } from "react";
+import { BaseProps } from "./types";
 import styled from "styled-components";
 import MapSvg from "./MapSvg";
-import {LoadingPeers} from "./LoadingPeers";
-import {Gateway, getLocationName} from "./Gateway"
-import {TitleTwo, TitleTwo2, TitleTwo3} from "./texts";
-import {IpfsScan, useIpfsScan} from "../lib/hooks/useIpfsScan";
-import {useClipboard} from "../lib/hooks/useClipboard";
-import {IpfsGateway} from "../lib/types";
-import {GatewayList} from "../lib/constans";
+import { LoadingPeers } from "./LoadingPeers";
+import { Gateway, getLocationName } from "./Gateway"
+import { TitleTwo, TitleTwo2, TitleTwo3 } from "./texts";
+import { IpfsScan, useIpfsScan } from "../lib/hooks/useIpfsScan";
+import { useClipboard } from "../lib/hooks/useClipboard";
+import { IpfsGateway } from "../lib/types";
+import { GatewayList } from "../lib/constans";
 import classNames from "classnames";
-import {FStat} from "../lib/useFileStat";
+import { FStat } from "../lib/useFileStat";
 
 export interface Props extends BaseProps {
   CID: string,
@@ -46,7 +46,7 @@ const City_Style = {
 
 
 function WorldMap_(p: Props) {
-  const {className, CID, fStat} = p
+  const { className, CID, fStat } = p
   const showReplicas = fStat.status === "Success"
   const [currentGatewayId, setCurrentGatewayID] = useState<number | null>(null)
   const scans = useIpfsScan(CID);
@@ -98,11 +98,12 @@ function WorldMap_(p: Props) {
       }
     }
   }, [scans])
-
+  const [fd, fdUnit] = (fStat.fDuration && fStat.fDuration.split(' ')) || ['-', 'Months']
+  const [pool, poolUnit] = (fStat.pool && fStat.pool.split(' ')) || ['-', 'CRU']
   const loading = useMemo(() => {
     return !scans.find(item => !item.isLoadPeers || !item.isLoadDag)
   }, [scans])
-  if (!currentGateway || loading) return <LoadingPeers/>
+  if (!currentGateway || loading) return <LoadingPeers />
 
   const _onClickOpen = () => window.open(`${currentGateway.value}/ipfs/${CID}`, '_blank')
   const _onClickCopy = () => copy(`${currentGateway.value}/ipfs/${CID}`)
@@ -111,21 +112,27 @@ function WorldMap_(p: Props) {
     <div className="info_content">
       <div className="total_peers">
         <TitleTwo>Results from: <span>IPFS Peers</span></TitleTwo>
-        <TitleTwo2>Verified at <span className={classNames({textLoadAnim: isLoadAvailable})}>
+        <TitleTwo2>Verified at <span className={classNames({ textLoadAnim: isLoadAvailable })}>
           {`${availableNum}/${scans.length}`}</span> Locations
         </TitleTwo2>
         {
           showReplicas && <TitleTwo2>
-            <span>{fStat.file.reported_replica_count}</span> Replicas Confirmed in <br/>Crust Network
+            <span>{fStat.file.reported_replica_count}</span> Replicas Confirmed in <br />Crust Network
           </TitleTwo2>}
+        {
+          showReplicas && <TitleTwo2>
+            <span>{fd}</span> {fdUnit} Storage Guaranteed<br />
+            by <span>{pool || '-'}</span> {poolUnit || 'CRU'} in Crust’s Assurance Pool
+          </TitleTwo2>
+        }
       </div>
-      <div className="flex1"/>
+      <div className="flex1" />
       <div className="current_gateway">
         <TitleTwo3>
           Details from:<span>{currentGateway.name}</span> gateway
         </TitleTwo3>
         <div className="location">
-          <span className="icon cru-fo-map-pin"/>
+          <span className="icon cru-fo-map-pin" />
           {getLocationName(currentGateway)}
         </div>
         <TitleTwo3>
@@ -141,11 +148,11 @@ function WorldMap_(p: Props) {
             <span className="download_links_item" onClick={_onClickCopy}>Download Link</span>
           </div>
         }
-        <div className="separator"/>
+        <div className="separator" />
         <div className="peers_title">
           <a target="_blank"
-             href="https://docs.ipfs.io/reference/http/api/#api-v0-dht-findprovs"
-             rel="noreferrer">/api/v0/dht/findprovs</a> returns:
+            href="https://docs.ipfs.io/reference/http/api/#api-v0-dht-findprovs"
+            rel="noreferrer">/api/v0/dht/findprovs</a> returns:
         </div>
         <div className="peers">
           {
@@ -157,10 +164,10 @@ function WorldMap_(p: Props) {
         </div>
       </div>
       <a target="_blank" href="https://github.com/crustio/ipfsscan/blob/main/docs/contribute-gateway.md"
-         rel="noreferrer">How to contribute a gateway?</a>
+        rel="noreferrer">How to contribute a gateway?</a>
     </div>
     <div className="map">
-      <MapSvg/>
+      <MapSvg />
       {
         data.map((item, index) =>
           <Gateway
@@ -169,7 +176,7 @@ function WorldMap_(p: Props) {
             data={item}
             position={City_Style[item[0].city]}
             onClick={setCurrentGatewayID}
-            active={item[0].id === currentGateway.id}/>)
+            active={item[0].id === currentGateway.id} />)
       }
     </div>
   </div>
@@ -212,7 +219,7 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
     }
 
     .current_gateway {
-      margin-top: 5.7rem;
+      margin-top: 12.7rem;
       border: 1px solid rgba(255, 255, 255, 0.5);
       border-radius: 1.14rem;
       padding: 1.7rem 0.7rem 0.7rem 0.7rem;

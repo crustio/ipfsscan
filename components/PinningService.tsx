@@ -1,10 +1,10 @@
-import React, {useMemo} from "react";
-import {BaseProps} from "./types";
-import styled from "styled-components";
-import {FStat} from "../lib/useFileStat";
-import {LabelText, TitleTwo, TitleTwo4, TitleTwo7} from "./texts";
-import {LoadingItem} from "./LoadingItem";
 import filesize from "filesize";
+import React from "react";
+import styled from "styled-components";
+import { FStat } from "../lib/useFileStat";
+import { LoadingItem } from "./LoadingItem";
+import { LabelText, LabelText2, TitleTwo, TitleTwo4, TitleTwo7 } from "./texts";
+import { BaseProps } from "./types";
 
 export interface Props extends BaseProps {
   cid: string,
@@ -12,93 +12,88 @@ export interface Props extends BaseProps {
 }
 
 function formatSize(size: number) {
-  return filesize(size, {round: 2}).toUpperCase()
-}
-
-function formatTime(months = 0) {
-  console.info('months::', months)
-  if (!months && months !== 0) return '-'
-  if (months < 12) return `${months} Months`
-  if (months < 11988) return `${Math.round(months / 12)} Years`
-  return `999+ Years`
+  return filesize(size, { round: 2 }).toUpperCase()
 }
 
 function PinningService_(p: Props) {
-  const {className, cid, fStat} = p
+  const { className, cid, fStat } = p
 
 
   const notAvailable = fStat.status !== "Loading" && fStat.status !== "Success"
-
-  const formatSG = useMemo(() => formatTime(fStat.months), [fStat.months])
-
+  const crustAppCidLink = `https://apps.crust.network/?rpc=wss%3A%2F%2Frpc.crust.network/#/storage_files/status/${cid}`
   return <div className={className}>
     <TitleTwo>Results from:<span>IPFS Pinning Service</span></TitleTwo>
     {
-      fStat.status === "Loading" && <LoadingItem/>
+      fStat.status === "Loading" && <LoadingItem />
     }
     {
       notAvailable && <div className="not_available">
-        Whoops! No replica reported from trusted pinning services.<br/>
-        Want to get more IPFS replicas and longer (even permanent) storage guaranteed for your file/data?<br/>
-        <br/>
+        Whoops! No replica reported from trusted pinning services.<br />
+        Want to get more IPFS replicas and longer (even permanent) storage guaranteed for your file/data?<br />
+        <br />
         Use <a target="_blank" href="https://apps.crust.network/?rpc=wss%3A%2F%2Frpc.crust.network/#/pins"
-               rel="noreferrer">Crust Pins</a> or learn more from <a
-        target="_blank"
-        href="https://wiki.crust.network/docs/en/storageUserGuide" rel="noreferrer">this guide</a>.
+          rel="noreferrer">Crust Pins</a> or learn more from <a
+            target="_blank"
+            href="https://wiki.crust.network/docs/en/storageUserGuide" rel="noreferrer">this guide</a>.
       </div>
     }
     {
       fStat.status === "Success" && fStat.file &&
       <div className="stats">
         <div className="border left">
-          <LabelText>
+          <LabelText className="ps_link" onClick={() => window.open('https://crust.network', '_blank')}>
             Crust Network<span>Trusted Pinning Service</span>
           </LabelText>
           <TitleTwo4>
             <span>{fStat.file.reported_replica_count}</span>Replicas available
           </TitleTwo4>
           <TitleTwo7>
-            <span>{formatSG}</span>Storage Guaranteed
+            <span>{fStat.fDuration}</span>Storage Guaranteed
           </TitleTwo7>
 
-          <LabelText className="mr-t1">
-            FILE INFO<span>On-Chain Data</span>
-          </LabelText>
+          <LabelText2 className="mr-t1">
+            FILE INFO<span onClick={() => window.open(crustAppCidLink, '_blank')}>On-Chain Data</span>
+          </LabelText2>
           <div className="text_info">
-            File CID:<br/>
-            {cid}<br/>
+            File CID:<br />
+            {cid}<br />
             File Size: {formatSize(fStat.file.file_size)}
           </div>
 
-          <LabelText className="mr-t1">
-            STORAGE INFO<span>On-Chain Data</span>
-          </LabelText>
+          <LabelText2 className="mr-t1">
+            STORAGE INFO<span onClick={() => window.open(crustAppCidLink, '_blank')}>On-Chain Data</span>
+          </LabelText2>
           <div className="text_info">
-            Renew Pool Balance: {fStat.pool}<br/>
-            Est.Storage Duration: {formatTime(fStat.months).toLowerCase()}
+            Renew Pool Balance: {fStat.pool}<br />
+            Est.Storage Duration: {fStat.fDuration.toLowerCase()}
           </div>
 
           <LabelText className="mr-t1">MORE ACTION</LabelText>
           <a className="to_link" target="_blank"
-             href={`https://apps.crust.network/?rpc=wss%3A%2F%2Frpc.crust.network/#/storage_files/status/${cid}`}
-             rel="noreferrer">
-            Want more replicas and duration guaranteed?<br/>
+            href={crustAppCidLink}
+            rel="noreferrer">
+            Want more replicas and duration guaranteed?<br />
             Visit more info about this CID in Crust Apps
           </a>
           <a className="to_link to_ps_docs" target="_blank"
-             href="https://github.com/crustio/ipfsscan/blob/main/docs/trusted-pinning-service.md" rel="noreferrer">
+            href="https://github.com/crustio/ipfsscan/blob/main/docs/trusted-pinning-service.md" rel="noreferrer">
             Want to apply for a Trusted Pinning Service?
           </a>
         </div>
-        <div className="space"/>
+        <div className="space" />
         <div className="border right">
-          <LabelText style={{marginLeft: '0.61rem', marginTop: '1.1857rem'}}>Details</LabelText>
+          <LabelText style={{ marginLeft: '0.61rem', marginTop: '1.1857rem' }}>Details: the list of Crust Network nodes who store a replica </LabelText>
           <div className="peers">
             {
               fStat.file.replicas.map((rep, index) => {
                 return <div className="peer" key={`rep_peer_${index}`}>
                   <span className="peer_order">{index + 1}</span>
-                  <span className="peer_id">{rep.who}</span>
+                  <a
+                    className="peer_id"
+                    target={'_blank'}
+                    rel="noreferrer"
+                    href={`https://crust.subscan.io/account/${rep.who}`}
+                  >{rep.who}</a>
                 </div>
               })
             }
@@ -204,6 +199,8 @@ export const PinningService = React.memo<Props>(styled(PinningService_)`
 
       .peer_id {
         margin-left: 4rem;
+        color: #cccccc;
+        text-decoration-color: #cccccc;
       }
 
       .peer:nth-child(2n - 1) {
@@ -212,6 +209,10 @@ export const PinningService = React.memo<Props>(styled(PinningService_)`
       }
     }
 
+  }
+  .ps_link {
+    cursor: pointer;
+    border-bottom: #CCCCCC solid 1px;
   }
 
 `)
