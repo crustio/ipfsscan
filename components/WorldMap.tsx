@@ -142,7 +142,7 @@ function WorldMap_(p: Props) {
           {`Your file is ${currentGatewayScan.dag ? 'available' : 'unavailable'} at this gateway`}
         </div>
         {
-          currentGatewayScan.dag && <div className="download_links_container">
+          <div className="download_links_container">
             <span className="download_links_item" onClick={_onClickOpen}>Open File</span>
             <span className="download_links_item_separator"></span>
             <span className="download_links_item" onClick={_onClickCopy}>Download Link</span>
