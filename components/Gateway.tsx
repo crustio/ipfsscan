@@ -1,10 +1,10 @@
-import React, {useCallback, useMemo} from "react";
-import {BaseProps} from "./types";
+import React, { useCallback, useMemo } from "react";
+import { BaseProps } from "./types";
 import styled from "styled-components";
 import classNames from "classnames";
-import {IpfsScan} from "../lib/hooks/useIpfsScan";
-import {IpfsGateway} from "../lib/types";
-import {TitleTwo5, TitleTwo6} from "./texts";
+import { IpfsScan } from "../lib/hooks/useIpfsScan";
+import { IpfsGateway } from "../lib/types";
+import { TitleTwo5, TitleTwo6 } from "./texts";
 
 export interface Props extends BaseProps {
   data: [IpfsGateway, IpfsScan],
@@ -25,9 +25,9 @@ export function getLocationName(gate: IpfsGateway): string {
 }
 
 function Gateway_(p: Props) {
-  const {className, data, position, active, onClick} = p
+  const { className, data, position, active, onClick } = p
   const [gate, scan] = data
-  const loading = scan.isLoadDag || scan.isLoadPeers
+  const loading = scan.isLoadDag
   const size = useMemo<number>(() => {
     const count = scan.peers.length
     if (count === 0) return 0
@@ -53,14 +53,14 @@ function Gateway_(p: Props) {
           left: -size,
           top: -size,
           borderRadius: size
-        }}/>
+        }} />
     }
-    {loading && <div className="dot_anim"/>}
-    <div className="dot"/>
+    {loading && <div className="dot_anim" />}
+    <div className="dot" />
     {
       !loading &&
       <div
-        className={classNames("info_panel", {active})}
+        className={classNames("info_panel", { active })}
         onClick={_onClick}
         style={{
           left: -150,
@@ -68,14 +68,14 @@ function Gateway_(p: Props) {
         }}>
         <TitleTwo5 className="title">Reported gateway: <span>{gate.name}</span></TitleTwo5>
         <div className="location text">
-          <span className="cru-fo cru-fo-map-pin"/> {getLocationName(gate)}
+          <span className="cru-fo cru-fo-map-pin" /> {getLocationName(gate)}
         </div>
-        <div className="flex1"/>
-        <div className="line"/>
-        <div className="flex1"/>
+        <div className="flex1" />
+        <div className="line" />
+        <div className="flex1" />
         <TitleTwo6 className="text">Availability: <span>{scan.dag ? 'YES' : 'NO'}</span></TitleTwo6>
-        <TitleTwo6 className="text">/dht/findprovs returns: <span>{scan.peers.length}</span> peers</TitleTwo6>
-        <div className="arrow"/>
+        <TitleTwo6 className="text">/dht/findprovs returns: <span className={classNames({ textLoadAnim: scan.isLoadPeers })}>{scan.peers.length}</span> peers</TitleTwo6>
+        <div className="arrow" />
       </div>
     }
   </div>
@@ -87,7 +87,7 @@ export const Gateway = React.memo<Props>(styled(Gateway_)`
   width: 0;
   height: 0;
 
-  ${({active}) => `z-index:${active ? 11 : 10};`};
+  ${({ active }) => `z-index:${active ? 11 : 10};`};
 
   .dot_round {
     z-index: 4;
