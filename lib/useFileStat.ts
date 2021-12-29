@@ -31,7 +31,8 @@ export interface FStat {
   status: Status,
   file?: FileStat,
   pool?: string,
-  months?: number
+  months?: number,
+  fDuration?: string
 }
 
 function parseStat(stat: any): FileStat | null {
@@ -40,6 +41,14 @@ function parseStat(stat: any): FileStat | null {
   } catch (e) {
     return null
   }
+}
+
+function formatTime(months = 0) {
+  console.info('months::', months)
+  if (!months && months !== 0) return '-'
+  if (months < 12) return `${months} Months`
+  if (months < 11988) return `${Math.round(months / 12)} Years`
+  return `999+ Years`
 }
 
 function useMemoBestNumber(api?: ApiPromise): number {
@@ -106,5 +115,6 @@ export function useFileStat(cid: string): FStat {
     }
     return current
   }, [prepaid, expired, _isZeroPrice, _filePrice, bestNumber])
+  fileStat.fDuration = useMemo(() => formatTime(fileStat.months),[fileStat.months])
   return fileStat
 }

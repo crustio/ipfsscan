@@ -1,4 +1,4 @@
-import {CID} from "multiformats";
+import { CID } from "multiformats";
 
 export function isCID(cid: any): boolean {
   if (!cid) return false
@@ -7,4 +7,9 @@ export function isCID(cid: any): boolean {
   } catch (_) {
     return false
   }
+}
+
+
+export function openDocs(path: string) {
+  window.open(`${window.location.origin}${path}`, '_blank')
 }

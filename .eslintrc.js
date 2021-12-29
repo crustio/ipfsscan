@@ -11,9 +11,9 @@ module.exports = {
         "plugin:@typescript-eslint/recommended"
     ],
     "settings": {
-      "react": {
-          'version': '17.0.2'
-      }
+        "react": {
+            'version': '17.0.2'
+        }
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -33,5 +33,6 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": 'off',
         "@typescript-eslint/no-var-requires": 'off',
         "@typescript-eslint/no-empty-function": 'warn',
+        "@typescript-eslint/ban-ts-comment": 'off'
     }
 };

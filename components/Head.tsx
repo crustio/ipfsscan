@@ -14,7 +14,7 @@ function Head_(p: Props) {
   const toHome = () => r.push('/')
   return <div className={className}>
     <div className="left">
-      <img className="logo" src="/images/ipfs_scan_logo.png" onClick={toHome}/>
+      <img className="logo" src="/images/ipfs_scan_logo.svg" onClick={toHome}/>
     </div>
     {cid && <InputCID defCid={r.query.cid as string}/>}
   </div>

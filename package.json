@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint . --fix",
-    "dev": "next dev",
+    "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
     "export": "next build && next export"
@@ -12,6 +12,8 @@
   "dependencies": {
     "@crustio/type-definitions": "^1.2.0",
     "@decooio/crust-fonts": "^1.1.0",
+    "@mdx-js/loader": "^1.6.22",
+    "@next/mdx": "^12.0.7",
     "@polkadot/api": "^6.8.1",
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
@@ -27,6 +29,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-i18next": "^11.12.0",
+    "remark-gfm": "1.0.0",
     "sass": "^1.42.1",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.4",

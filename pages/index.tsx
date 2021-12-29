@@ -10,7 +10,7 @@ import PinningService from "../components/PinningService";
 import InputCID from "../components/InputCID";
 import classNames from "classnames";
 import MapSvg from "../components/MapSvg";
-import {isCID} from "../lib/utils";
+import {isCID, openDocs} from "../lib/utils";
 import {useFileStat} from "../lib/useFileStat";
 
 function Home(p: BaseProps) {
@@ -19,6 +19,7 @@ function Home(p: BaseProps) {
   const CID = r.query.cid as string
   const isCid = useMemo(() => isCID(CID), [CID])
   const fStat = useFileStat(CID)
+  const _onClickDocs = () => openDocs('/docs/welcome')
 
   return (
     <Page className={classNames(className)}>
@@ -35,7 +36,8 @@ function Home(p: BaseProps) {
               <MapSvg/>
             </div>
             <div className="flex1"/>
-            <img className="logo" src="/images/ipfs_scan_logo.png"/>
+            <img className="logo" src="/images/ipfs_scan_logo.svg"/>
+            <span className="docs" onClick={_onClickDocs}>docs</span>
             <InputCID defCid={CID} className={"input_cid"}/>
             <div className="search-tip">
               Please input an IPFS CID.
@@ -77,6 +79,7 @@ export default React.memo(styled(Home)`
     display: flex;
     align-items: center;
     flex-direction: column;
+    position: relative;
 
     .flex1 {
       flex: 1;
@@ -110,7 +113,14 @@ export default React.memo(styled(Home)`
       height: auto;
       margin-bottom: 3.2rem;
     }
-
+    .docs {
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 15px;
+      position: absolute;
+      right: 36px;
+      top: 18px;
+    }
     .input_cid {
       z-index: 1;
       width: 80%;
