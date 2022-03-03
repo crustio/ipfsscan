@@ -24,6 +24,20 @@ const devList: IpfsGateway[] = [
     country: "Germany",
     value: "http://localhost:5002"
   },
+  {
+    id: 4,
+    name: "Deklod",
+    city: "Beijing",
+    country: "China",
+    value: "http://localhost:5002"
+  },
+  {
+    id: 5,
+    name: "Crust Network",
+    city: "Shanghai",
+    country: "China",
+    value: "https://ipfs-gw.decloud.foundation"
+  },
 ]
 
 const prodList: IpfsGateway[] = [
@@ -54,6 +68,13 @@ const prodList: IpfsGateway[] = [
     city: "Singapore",
     // country: "",
     value: "https://crustipfs.xyz"
+  },
+  {
+    id: 5,
+    name: "Deklod",
+    city: "Beijing",
+    country: "China",
+    value: "https://ipfs-gw.dkskcloud.com"
   },
 ]
 
