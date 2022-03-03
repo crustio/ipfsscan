@@ -24,23 +24,28 @@ const City_Style = {
   },
   // Shanghai
   Shanghai: {
-    top: '39%',
-    left: '84%'
+    top: '46%',
+    left: '82%'
   },
   // Berlin
   Berlin: {
-    top: '41%',
+    top: '40%',
     left: '50%'
   },
   // Singapore
   Singapore: {
-    top: '65%',
-    left: '78%'
+    top: '69%',
+    left: '80%'
   },
   // Seattle
   Seattle: {
     top: '40%',
     left: '15%'
+  },
+  //Beijing
+  Beijing: {
+    top: '38%',
+    left: '79%'
   },
 }
 

@@ -24,6 +24,20 @@ const devList: IpfsGateway[] = [
     country: "Germany",
     value: "http://localhost:5002"
   },
+  {
+    id: 4,
+    name: "Deklod",
+    city: "Beijing",
+    country: "China",
+    value: "http://localhost:5002"
+  },
+  {
+    id: 5,
+    name: "Crust Network",
+    city: "Shanghai",
+    country: "China",
+    value: "https://ipfs-gw.decloud.foundation"
+  },
 ]
 
 const prodList: IpfsGateway[] = [
@@ -36,25 +50,32 @@ const prodList: IpfsGateway[] = [
   },
   {
     id: 2,
+    name: "⚡ Deklod",
+    city: "Beijing",
+    country: "China",
+    value: "https://ipfs-gw.dkskcloud.com"
+  },
+  {
+    id: 3,
     name: "Crust Network",
     city: "Shanghai",
     country: "China",
     value: "https://ipfs-gw.decloud.foundation"
   },
   {
-    id: 3,
+    id: 4,
     name: "⚡ Thunder Gateway",
     city: "Berlin",
     country: "Germany",
     value: "https://gw.crustapps.net"
   },
   {
-    id: 4,
+    id: 5,
     name: "DCF",
     city: "Singapore",
     // country: "",
     value: "https://crustipfs.xyz"
-  },
+  }
 ]
 
 export const isDev = process.env.NODE_ENV === 'development'
