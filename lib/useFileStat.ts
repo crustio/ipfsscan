@@ -6,6 +6,7 @@ import {formatBalance} from "@polkadot/util";
 import {useFilePrice} from "./useFilePrice";
 import BN from "bn.js";
 import {ApiPromise} from "@polkadot/api";
+import { isFunction } from '@polkadot/util';
 
 export type Status = 'Loading' | 'Submitted' | 'Expired' | 'Success' | 'Failed';
 
@@ -65,7 +66,7 @@ function useMemoBestNumber(api?: ApiPromise): number {
 
 export function useFileStat(cid: string): FStat {
   const {api} = useApp()
-  const queryFileApi = api && api.query?.market && api.query?.market.files
+  const queryFileApi = api && api.query?.market && (isFunction(api.query.market.filesV2) ? api.query.market.filesV2 : api.query.market.files)
   const stat = useCall<{ isEmpty: boolean } | undefined | null>(queryFileApi, [cid])
   const bestNumber = useMemoBestNumber(api)
   const fileStat = useMemo<FStat>(() => {
