@@ -299,12 +299,12 @@
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
-"@crustio/type-definitions@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.npmmirror.com/@crustio/type-definitions/-/type-definitions-1.3.0.tgz#c4810da0bcef58d67439491a5cde1d0beb43a03d"
-  integrity sha512-xdW6npZTmWfDzZEVCMjRK7f7wQrU/cgIltGlvnXY2AFD2m9uBW+s6/lx9YHuLbk7y3NrrQwbp3owFuGw4A2hNw==
+"@crustio/type-definitions@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@crustio/type-definitions/-/type-definitions-1.2.0.tgz#221a626b8e18ac77fb9e13e6b018803e78727b71"
+  integrity sha512-i/u3WUuhfC76JirlSwyGIKDwoFrax5QUonxGG/wgX2KEDKM9MIVx4qEsphE/tjAxlX1/qO3c72dzvKR2gndhgg==
   dependencies:
-    "@open-web3/orml-type-definitions" "^0.9.4-7"
+    "@open-web3/orml-type-definitions" "^0.8.2-9"
 
 "@decooio/crust-fonts@^1.1.0":
   version "1.1.0"
@@ -531,12 +531,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@open-web3/orml-type-definitions@^0.9.4-7":
-  version "0.9.4-38"
-  resolved "https://registry.npmmirror.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.9.4-38.tgz#fc7642f6a518da2618ae39fa76fe046ee57c1e80"
-  integrity sha512-kV0++JlRLEf7Z1y+Jm+792zqx6Q7dzpGP73rJJmQrBaeTML5mQzu4veZ24TVtcLV6hsGjUU/ixrJODNj6CCuZQ==
-  dependencies:
-    lodash.merge "^4.6.2"
+"@open-web3/orml-type-definitions@^0.8.2-9":
+  version "0.8.2-11"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.8.2-11.tgz#56358d371b63f83761234a7b1283ac9008e6dddd"
+  integrity sha512-cUv5+mprnaGNt0tu3FhK1nFRBK7SGjPhA1O0nxWWeRmuuH5fjkr0glbHE9kcKuCBfsh7nt6NGwxwl9emQtUDSA==
 
 "@polkadot/api-derive@6.8.1":
   version "6.8.1"

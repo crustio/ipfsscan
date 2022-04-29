@@ -10,7 +10,7 @@
     "export": "next build && next export"
   },
   "dependencies": {
-    "@crustio/type-definitions": "^1.3.0",
+    "@crustio/type-definitions": "^1.2.0",
     "@decooio/crust-fonts": "^1.1.0",
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^12.0.7",
