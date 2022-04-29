@@ -73,7 +73,13 @@ export function useFileStat(cid: string): FStat {
     if (stat && !stat.isEmpty) {
       const ps = parseStat(stat)
       if (ps) {
-        ps.replicas = ps.replicas.filter(item => item.is_reported)
+        const rp = []
+        Object.keys(ps.replicas).forEach(e => {
+          if (ps.replicas[e].is_reported) {
+            rp.push(ps.replicas[e])
+          }
+        })
+        ps.replicas = rp
         fStat.file = ps
         fStat.pool = formatBalance(ps.prepaid, {decimals: 12, withUnit: 'CRU'})
         const {expired_at, reported_replica_count} = ps
