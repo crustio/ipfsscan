@@ -65,7 +65,7 @@ function useMemoBestNumber(api?: ApiPromise): number {
 
 export function useFileStat(cid: string): FStat {
   const {api} = useApp()
-  const queryFileApi = api && api.query?.market && api.query?.market.files
+  const queryFileApi = api && api.query?.market && api.query?.market.filesV2
   const stat = useCall<{ isEmpty: boolean } | undefined | null>(queryFileApi, [cid])
   const bestNumber = useMemoBestNumber(api)
   const fileStat = useMemo<FStat>(() => {
