@@ -75,6 +75,13 @@ const prodList: IpfsGateway[] = [
     city: "Singapore",
     // country: "",
     value: "https://crustipfs.xyz"
+  },
+  {
+    id: 6,
+    name: "⚡ IPFS-GATEWAY.CLOUD",
+    city: "Singapore",
+    // country: "",
+    value: "https://ipfs-gateway.cloud"
   }
 ]
 
