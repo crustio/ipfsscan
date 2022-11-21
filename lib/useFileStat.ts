@@ -93,7 +93,7 @@ export function useFileStat(cid: string): FStat {
   const [newCid, setNewCid] = useState<string>();
   useEffect(() => {
     getRootCid(cid).then(res => setNewCid(res)).catch(console.error)
-  }, cid)
+  }, [cid])
   const queryFileApi = api && api.query?.market && api.query?.market.filesV2
   const stat = useCall<{ isEmpty: boolean } | undefined | null>(queryFileApi, [newCid])
   const bestNumber = useMemoBestNumber(api)
