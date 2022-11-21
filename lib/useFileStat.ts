@@ -1,11 +1,13 @@
-import {useApp} from "./AppContext";
-import {useCall} from "./hooks/useCall";
-import {BlockNumber} from "@polkadot/types/interfaces";
-import {useEffect, useMemo, useState} from "react";
-import {formatBalance} from "@polkadot/util";
-import {useFilePrice} from "./useFilePrice";
+import { useApp } from "./AppContext";
+import { useCall } from "./hooks/useCall";
+import { BlockNumber } from "@polkadot/types/interfaces";
+import { useEffect, useMemo, useState } from "react";
+import { formatBalance } from "@polkadot/util";
+import { useFilePrice } from "./useFilePrice";
 import BN from "bn.js";
-import {ApiPromise} from "@polkadot/api";
+import { ApiPromise } from "@polkadot/api";
+import axios, { Method } from 'axios';
+
 
 export type Status = 'Loading' | 'Submitted' | 'Expired' | 'Success' | 'Failed';
 
@@ -63,13 +65,40 @@ function useMemoBestNumber(api?: ApiPromise): number {
   return num
 }
 
+async function getRootCid(cid: string): Promise<string> {
+  var config = {
+    method: "get" as Method,
+    url: `https://folderanalyzer.crustapps.net/api/v1/root?cid=${cid}`
+  };
+
+  if (!cid) {
+    return cid
+  }
+
+  try {
+    const result = await axios(config);
+    if (result.status == 200) {
+      return result.data
+    } else {
+      return cid;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return cid;
+}
+
 export function useFileStat(cid: string): FStat {
-  const {api} = useApp()
+  const { api } = useApp()
+  const [newCid, setNewCid] = useState<string>();
+  useEffect(() => {
+    getRootCid(cid).then(res => setNewCid(res)).catch(console.error)
+  }, cid)
   const queryFileApi = api && api.query?.market && api.query?.market.filesV2
-  const stat = useCall<{ isEmpty: boolean } | undefined | null>(queryFileApi, [cid])
+  const stat = useCall<{ isEmpty: boolean } | undefined | null>(queryFileApi, [newCid])
   const bestNumber = useMemoBestNumber(api)
   const fileStat = useMemo<FStat>(() => {
-    const fStat: FStat = {status: 'Loading'}
+    const fStat: FStat = { status: 'Loading' }
     if (stat && !stat.isEmpty) {
       const ps = parseStat(stat)
       if (ps) {
@@ -81,8 +110,8 @@ export function useFileStat(cid: string): FStat {
         })
         ps.replicas = rp
         fStat.file = ps
-        fStat.pool = formatBalance(ps.prepaid, {decimals: 12, withUnit: 'CRU'})
-        const {expired_at, reported_replica_count} = ps
+        fStat.pool = formatBalance(ps.prepaid, { decimals: 12, withUnit: 'CRU' })
+        const { expired_at, reported_replica_count } = ps
         if (expired_at && expired_at < bestNumber) {
           // expired
           fStat.status = 'Expired';
@@ -121,6 +150,6 @@ export function useFileStat(cid: string): FStat {
     }
     return current
   }, [prepaid, expired, _isZeroPrice, _filePrice, bestNumber])
-  fileStat.fDuration = useMemo(() => formatTime(fileStat.months),[fileStat.months])
+  fileStat.fDuration = useMemo(() => formatTime(fileStat.months), [fileStat.months])
   return fileStat
 }
