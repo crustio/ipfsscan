@@ -65,27 +65,32 @@ function useMemoBestNumber(api?: ApiPromise): number {
   return num
 }
 
-async function getRootCid(cid: string): Promise<string> {
-  var config = {
-    method: "get" as Method,
-    url: `https://folderanalyzer.crustapps.net/api/v1/root?cid=${cid}`
-  };
-
-  if (!cid) {
-    return cid
+async function rootCid1(cid: string): Promise<string|null> {
+  try{
+    const res = await axios.get<string>(`https://folderanalyzer.crustapps.net/api/v1/root?cid=${cid}`)
+    if(res.status === 200) return res.data
+  }catch(e){
+    console.info(e)
   }
+  return null
+}
 
-  try {
-    const result = await axios(config);
-    if (result.status == 200) {
-      return result.data
-    } else {
-      return cid;
+async function rootCid2(cid: string): Promise<string|null> {
+  try{
+    const res = await axios.get(`https://graph.crustnetwork.io/api/file/${cid}/detail`)
+    if(res.status === 200 && res.data && res.data.data && res.data.data.parentFileStat){
+      return res.data.data.parentFileStat.parentCid
     }
-  } catch (error) {
-    console.log(error);
+  }catch(e){
+    console.info(e)
   }
-  return cid;
+  return null
+}
+
+async function getRootCid(cid: string): Promise<string> {
+  if(!cid) return cid;
+  const [cid1,cid2] = await Promise.all([rootCid1(cid), rootCid2(cid)])
+  return cid1 || cid2 || cid;
 }
 
 export function useFileStat(cid: string): FStat {

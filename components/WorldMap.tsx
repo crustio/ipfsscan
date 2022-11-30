@@ -327,6 +327,7 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
     min-width: 620px;
     height: min-content;
     position: relative;
+    overflow: hidden;
     display: inline-block;
   }
 `)
