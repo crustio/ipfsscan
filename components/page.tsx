@@ -19,7 +19,6 @@ function Page_(p: Props) {
   return (
     <div className={classNames(className)}>
       <Head>
-        <link rel="icon" href="/favicon.ico"/>
         <meta
           name="description"
           content="Base Next"
