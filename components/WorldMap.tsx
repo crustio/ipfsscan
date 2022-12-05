@@ -68,7 +68,7 @@ function WorldMap_(p: Props) {
     return scans.filter((item) => !!item.dag).length
   }, [scans])
   const currentGatewayScan = useMemo<IpfsScan | null>(() => {
-    console.info('scans:', scans)
+    // console.info('scans:', scans)
     if (currentGatewayId) {
       return scans.find(item => item.gatewayId === currentGatewayId)
     }
