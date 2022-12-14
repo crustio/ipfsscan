@@ -46,7 +46,7 @@ const prodList: IpfsGateway[] = [
     name: "⚡ Thunder Gateway",
     city: "Seattle",
     country: "US",
-    value: "https://crustwebsites.net"
+    value: "https://gw.crustfiles.app"
   },
   // {
   //   id: 2,
@@ -67,7 +67,7 @@ const prodList: IpfsGateway[] = [
     name: "⚡ Thunder Gateway",
     city: "Berlin",
     country: "Germany",
-    value: "https://gw.crustapps.net"
+    value: "https://gw.crustfiles.net"
   },
   {
     id: 5,
