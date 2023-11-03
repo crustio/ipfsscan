@@ -68,7 +68,7 @@ function WorldMap_(p: Props) {
     return scans.filter((item) => !!item.dag).length
   }, [scans])
   const currentGatewayScan = useMemo<IpfsScan | null>(() => {
-    console.info('scans:', scans)
+    // console.info('scans:', scans)
     if (currentGatewayId) {
       return scans.find(item => item.gatewayId === currentGatewayId)
     }
@@ -327,6 +327,7 @@ export const WorldMap = React.memo<Props>(styled(WorldMap_)`
     min-width: 620px;
     height: min-content;
     position: relative;
+    overflow: hidden;
     display: inline-block;
   }
 `)
