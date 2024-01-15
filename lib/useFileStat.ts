@@ -151,5 +151,5 @@ export function useFileStat(cid: string): FStat {
     return current
   }, [prepaid, expired, _isZeroPrice, _filePrice, bestNumber])
   fileStat.fDuration = useMemo(() => formatTime(fileStat.months), [fileStat.months])
-  return fileStat
+  return useMemo(() => ({...fileStat}), [fileStat, fileStat.months, fileStat.fDuration])
 }
