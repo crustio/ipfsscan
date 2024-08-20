@@ -46,7 +46,7 @@ const prodList: IpfsGateway[] = [
     name: "⚡ Thunder Gateway",
     city: "Seattle",
     country: "US",
-    value: "https://crustipfs.mobi"
+    value: "https://gw.crustgw.work"
   },
   // {
   //   id: 2,
@@ -60,21 +60,21 @@ const prodList: IpfsGateway[] = [
     name: "Crust Network",
     city: "Shanghai",
     country: "China",
-    value: "https://crustipfs.online"
+    value: "https://gw.crustgw.org"
   },
   {
     id: 4,
     name: "⚡ Thunder Gateway",
     city: "Berlin",
     country: "Germany",
-    value: "https://crustipfs.info"
+    value: "https://gw.crust-gateway.xyz"
   },
   {
     id: 5,
     name: "DCF",
     city: "Singapore",
     // country: "",
-    value: "https://crustipfs.tech"
+    value: "https://gw.crust-gateway.com"
   }
 ]
 
