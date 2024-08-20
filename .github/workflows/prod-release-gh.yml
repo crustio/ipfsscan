@@ -19,7 +19,9 @@ jobs:
           node-version: "20.15.0"
 
       - name: Run install
-        run: yarn install --frozen-lockfile
+        run: |
+          yarn config set strict-ssl false
+          yarn install --frozen-lockfile
 
       - name: Build
         run: yarn export
