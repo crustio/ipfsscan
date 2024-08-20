@@ -16,10 +16,10 @@ jobs:
       - name: Use Node.js 14
         uses: actions/setup-node@v2
         with:
-          node-version: "14.17.3"
+          node-version: "20.15.0"
 
       - name: Run install
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Build
         run: yarn export

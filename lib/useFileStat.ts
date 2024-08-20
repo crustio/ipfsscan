@@ -6,79 +6,78 @@ import { formatBalance } from "@polkadot/util";
 import { useFilePrice } from "./useFilePrice";
 import BN from "bn.js";
 import { ApiPromise } from "@polkadot/api";
-import axios, { Method } from 'axios';
+import axios, { Method } from "axios";
 
-
-export type Status = 'Loading' | 'Submitted' | 'Expired' | 'Success' | 'Failed';
+export type Status = "Loading" | "Submitted" | "Expired" | "Success" | "Failed";
 
 export interface Replica {
-  anchor: string
-  created_at: number,
-  is_reported: boolean,
-  valid_at: number,
-  who: string
+  anchor: string;
+  created_at: number;
+  is_reported: boolean;
+  valid_at: number;
+  who: string;
 }
 
 export interface FileStat {
-  amount: number
-  file_size: number
-  expired_at: number
-  reported_replica_count?: number
-  prepaid: string,
-  replicas: Replica[],
-  spower: number
+  amount: number;
+  file_size: number;
+  expired_at: number;
+  reported_replica_count?: number;
+  prepaid: string;
+  replicas: Replica[];
+  spower: number;
 }
 
 export interface FStat {
-  status: Status,
-  file?: FileStat,
-  pool?: string,
-  months?: number,
-  fDuration?: string
+  status: Status;
+  file?: FileStat;
+  pool?: string;
+  months?: number;
+  fDuration?: string;
 }
 
 function parseStat(stat: any): FileStat | null {
   try {
-    return JSON.parse(JSON.stringify(stat))
+    return JSON.parse(JSON.stringify(stat));
   } catch (e) {
-    return null
+    return null;
   }
 }
 
 function formatTime(months = 0) {
-  console.info('months::', months)
-  if (!months && months !== 0) return '-'
-  if (months < 12) return `${months} Months`
-  if (months < 11988) return `${Math.round(months / 12)} Years`
-  return `999+ Years`
+  console.info("months::", months);
+  if (!months && months !== 0) return "-";
+  if (months < 12) return `${months} Months`;
+  if (months < 11988) return `${Math.round(months / 12)} Years`;
+  return `999+ Years`;
 }
 
 function useMemoBestNumber(api?: ApiPromise): number {
   const bestNum = useCall<BlockNumber>(api?.derive?.chain?.bestNumber) || 0;
-  const bestNumber = bestNum && bestNum.toNumber()
-  const [num, setNum] = useState(bestNumber)
+  const bestNumber = bestNum && bestNum.toNumber();
+  const [num, setNum] = useState(bestNumber);
   useEffect(() => {
     if (bestNumber && bestNumber - num > 14400) {
-      setNum(bestNumber)
+      setNum(bestNumber);
     }
-  })
-  return num
+  });
+  return num;
 }
 
 async function getRootCid(cid: string): Promise<string> {
-  var config = {
-    method: "get" as Method,
-    url: `https://folderanalyzer.crustapps.net/api/v1/root?cid=${cid}`
+  const config: { method: Method; url: string } = {
+    method: "get",
+    url: `https://folderanalyzer.crustapps.net/api/v1/root?cid=${cid}`,
   };
 
   if (!cid) {
-    return cid
+    return cid;
   }
 
   try {
     const result = await axios(config);
     if (result.status == 200) {
-      return result.data
+      return result.data;
     } else {
       return cid;
     }
@@ -89,67 +88,69 @@ async function getRootCid(cid: string): Promise<string> {
 }
 
 export function useFileStat(cid: string): FStat {
-  const { api } = useApp()
+  const { api } = useApp();
   const [newCid, setNewCid] = useState<string>();
   useEffect(() => {
-    getRootCid(cid).then(res => setNewCid(res)).catch(console.error)
-  }, [cid])
-  const queryFileApi = api && api.query?.market && api.query?.market.filesV2
-  const stat = useCall<{ isEmpty: boolean } | undefined | null>(queryFileApi, [newCid])
-  const bestNumber = useMemoBestNumber(api)
+    getRootCid(cid)
+      .then((res) => setNewCid(res))
+      .catch(console.error);
+  }, [cid]);
+  const queryFileApi = api && api.query?.market && api.query?.market.filesV2;
+  const stat = useCall<{ isEmpty: boolean } | undefined | null>(queryFileApi, [newCid]);
+  const bestNumber = useMemoBestNumber(api);
   const fileStat = useMemo<FStat>(() => {
-    const fStat: FStat = { status: 'Loading' }
+    const fStat: FStat = { status: "Loading" };
     if (stat && !stat.isEmpty) {
-      const ps = parseStat(stat)
+      const ps = parseStat(stat);
       if (ps) {
-        const rp = []
-        Object.keys(ps.replicas).forEach(e => {
+        const rp = [];
+        Object.keys(ps.replicas).forEach((e) => {
           if (ps.replicas[e].is_reported) {
-            rp.push(ps.replicas[e])
+            rp.push(ps.replicas[e]);
           }
-        })
-        ps.replicas = rp
-        fStat.file = ps
-        fStat.pool = formatBalance(ps.prepaid, { decimals: 12, withUnit: 'CRU' })
-        const { expired_at, reported_replica_count } = ps
+        });
+        ps.replicas = rp;
+        fStat.file = ps;
+        fStat.pool = formatBalance(ps.prepaid, { decimals: 12, withUnit: "CRU" });
+        const { expired_at, reported_replica_count } = ps;
         if (expired_at && expired_at < bestNumber) {
           // expired
-          fStat.status = 'Expired';
+          fStat.status = "Expired";
         }
         if (reported_replica_count < 1) {
           // pending
-          fStat.status = 'Submitted';
+          fStat.status = "Submitted";
         }
         if (expired_at && expired_at > bestNumber && reported_replica_count > 0) {
           // success
-          fStat.status = 'Success';
+          fStat.status = "Success";
         }
       }
     } else {
-      fStat.status = 'Failed'
+      fStat.status = "Failed";
     }
-    if (!bestNumber) fStat.status = 'Loading'
-    return fStat
-  }, [stat, bestNumber])
-  const prepaid = fileStat.file?.prepaid ?? 0
-  const expired = fileStat.file?.expired_at ?? 0
-  const filePrice = useFilePrice(fileStat.file?.file_size || 1024)
-  const _isZeroPrice = filePrice.isZero()
-  const _filePrice = filePrice.toString()
+    if (!bestNumber) fStat.status = "Loading";
+    return fStat;
+  }, [stat, bestNumber]);
+  const prepaid = fileStat.file?.prepaid ?? 0;
+  const expired = fileStat.file?.expired_at ?? 0;
+  const filePrice = useFilePrice(fileStat.file?.file_size || 1024);
+  const _isZeroPrice = filePrice.isZero();
+  const _filePrice = filePrice.toString();
   fileStat.months = useMemo<number>(() => {
-    console.info('month::', prepaid, expired, _filePrice, bestNumber)
+    console.info("month::", prepaid, expired, _filePrice, bestNumber);
     if (_isZeroPrice) {
-      return 0
+      return 0;
     }
-    let current = 0
+    let current = 0;
     if (expired) {
-      current = Math.round((expired - bestNumber) * 6 / 2592000)
+      current = Math.round(((expired - bestNumber) * 6) / 2592000);
     }
     if (prepaid) {
-      return new BN(prepaid).div(new BN(_filePrice)).mul(new BN(6)).add(new BN(current)).toNumber()
+      return new BN(prepaid).div(new BN(_filePrice)).mul(new BN(6)).add(new BN(current)).toNumber();
     }
-    return current
-  }, [prepaid, expired, _isZeroPrice, _filePrice, bestNumber])
-  fileStat.fDuration = useMemo(() => formatTime(fileStat.months), [fileStat.months])
-  return useMemo(() => ({...fileStat}), [fileStat, fileStat.months, fileStat.fDuration])
+    return current;
+  }, [prepaid, expired, _isZeroPrice, _filePrice, bestNumber]);
+  fileStat.fDuration = useMemo(() => formatTime(fileStat.months), [fileStat.months]);
+  return useMemo(() => ({ ...fileStat }), [fileStat, fileStat.months, fileStat.fDuration]);
 }
