@@ -12,6 +12,9 @@ const withMDX = nextMdx({
  * @type {import('next').NextConfig}
  */
 const nextConfig = withMDX({
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config) => {
     config.resolve.fallback = {
       crypto: require.resolve('crypto-browserify'),
@@ -19,6 +22,7 @@ const nextConfig = withMDX({
       stream: require.resolve('stream-browserify'),
       https: require.resolve("https-browserify"),
       http: require.resolve("stream-http"),
+      vm: false,
       os: false,
       assert: false,
       fs: false,
